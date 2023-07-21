@@ -2,6 +2,14 @@ import argparse
 import numpy as np
 import cv2
 
+color2Hue = {
+    "red":      0 / 2,
+    "yellow":  60 / 2,
+    "green":  120 / 2,
+    "blue":   180 / 2,
+    "blue":   240 / 2,
+    "purple": 300 / 2
+}
 
 class ColorDetection():
     def __init__(self, img: np.ndarray, detect: int, resize: int, debugMode: bool =False):
@@ -13,12 +21,6 @@ class ColorDetection():
 
         # For HSV in OpenCV, hue range is [0,179], NOT [0,359]
         # [OpenCV: Changing Colorspaces](https://docs.opencv.org/4.x/df/d9d/tutorial_py_colorspaces.html)
-        self.color2Hue = {"red":      0 / 2,
-                          "yellow":  60 / 2,
-                          "green":  120 / 2,
-                          "blue":   180 / 2,
-                          "blue":   240 / 2,
-                          "purple": 300 / 2}
 
         width = int(self.img.shape[1] * self.RESIZE_PERCENTAGE / 100)
         height = int(self.img.shape[0] * self.RESIZE_PERCENTAGE / 100)
@@ -204,7 +206,7 @@ class ColorDetection():
             diff = abs(hue - colorHuePair[1])
             return diff if diff < 90 else 180 - diff
 
-        color, _ = min(self.color2Hue.items(), key=hueDiffence)
+        color, _ = min(color2Hue.items(), key=hueDiffence)
         return color
 
     def main(self):

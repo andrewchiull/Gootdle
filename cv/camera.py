@@ -1,40 +1,32 @@
-from PyQt5.QtCore import QObject
-from PyQt5 import QtCore, QtGui
-import numpy as np
 import cv2
-import time
-from Color.Color import ColorDetection
-class Camera(QObject):
+import color
 
-
-    picdone = QtCore.pyqtSignal(np.ndarray)
-    fail = QtCore.pyqtSignal(bool)
-    is_paused = False
-    def img2pyqt(self,img,label):
-        '''
-        convert the opencv format to pyqt format color
-        '''
-        frame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        temp = QtGui.QImage(frame, frame.shape[1], frame.shape[0], frame.shape[1]*3, QtGui.QImage.Format_RGB888)
-        return QtGui.QPixmap.fromImage(temp).scaled(label.width(), label.height())
-
+class Camera:
     def run(self):
 
-        self.vid = cv2.VideoCapture(0)
+        # Ref: [Python-OpenCV — 讀取顯示及儲存影像、影片 | by 李謦伊 | 謦伊的閱讀筆記 | Medium](https://medium.com/ching-i/python-opencv-%E8%AE%80%E5%8F%96%E9%A1%AF%E7%A4%BA%E5%8F%8A%E5%84%B2%E5%AD%98%E5%BD%B1%E5%83%8F-%E5%BD%B1%E7%89%87-ee3701c454da)
 
-        while True:
-            if self.is_paused:
-                ret, frame = self.vid.read()
-                frame = cv2.rotate(frame, cv2.ROTATE_180)
-                cd = ColorDetection(img=frame, detect=40, resize=50)
-                cd.main()
-                self.is_paused = False
-                continue
-            ret, frame = self.vid.read()
-            frame = cv2.rotate(frame, cv2.ROTATE_180)
-            # time.sleep(1/20)
-            if ret:
-                self.screen.setPixmap(self.img2pyqt(frame,self.screen))
-            else:
-                self.fail.emit(False)
+        # current camera
+        cap = cv2.VideoCapture(0)
+        while (cap.isOpened()):
+            ret, frame = cap.read()
+            cv2.imshow('frame', frame)
+            key = cv2.waitKey(1)
+            # ESC
+            if key == 27:
                 break
+        cap.release()
+        cv2.destroyAllWindows()
+        
+        cd = color.ColorDetection(img=frame, detect=40, resize=50)
+        cd.main()
+
+
+
+def main():
+    camera = Camera()
+    camera.run()
+
+
+if __name__ == "__main__":
+    main()

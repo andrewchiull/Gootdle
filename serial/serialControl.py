@@ -1,9 +1,8 @@
-from PyQt5.QtCore import QObject
 import time
 import serial
 
 
-class SerialControl(QObject):
+class SerialControl():
     command = None
 
     def setupSerial(self):
