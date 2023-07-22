@@ -10,6 +10,8 @@ class Camera:
         cap = cv2.VideoCapture(0)
         while (cap.isOpened()):
             ret, frame = cap.read()
+            break
+            
             cv2.imshow('frame', frame)
             key = cv2.waitKey(1)
             # ESC
