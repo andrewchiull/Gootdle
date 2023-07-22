@@ -66,7 +66,7 @@ sudo sh get-docker.sh
 ```
 
 ### If permission denied
-
+[How to fix docker: Got permission denied issue - Stack Overflow](https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue)
 ```bash
 sudo groupadd docker
 sudo usermod -aG docker $USER
