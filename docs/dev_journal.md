@@ -63,6 +63,20 @@ nano ~/.zshrc
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-# Executing docker install script, commit: 7cae5f8b0decc17d6571f9f52eb840fbc13b2737
-# <...>
 ```
+
+### If permission denied
+
+```bash
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker run hello-world
+```
+
+### Dockerfile
+
+[打造最小 Python Docker 容器 - 小惡魔 - AppleBOY](https://blog.wu-boy.com/2021/07/building-minimal-docker-containers-for-python-applications/)
+
+
+[docker环境里安装opencv ImportError: libGL.so.1: cannot open shared object file: No such file or directory\_docker qt libgl.so.1\_Max\_ZhangJF的博客-CSDN博客](https://blog.csdn.net/Max_ZhangJF/article/details/108920050)
