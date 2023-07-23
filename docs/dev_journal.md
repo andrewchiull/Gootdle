@@ -1,5 +1,5 @@
 # Dev Journal
-
+- yushan
 # Python
 
 ## Coding Style
