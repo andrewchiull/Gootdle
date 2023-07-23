@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>智能衣櫃</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function() {
+            console.log('WebSocket 連接成功');
+        });
+    
+        // 接收 WebSocket 事件，並更新頁面內容
+        socket.on('new_color', function(color) {
+            var li = document.createElement('li');
+            li.innerHTML = "ID: " + color.id + ", Color Name: " + color.color_name;
+            document.getElementById('colorList').appendChild(li);
+        });
+
+        // 接收查询结果，并更新页面颜色列表
+        socket.on('query_result', function(data) {
+            var colorList = document.getElementById('colorList');
+            colorList.innerHTML = ''; // 清空列表
+            data.forEach(function(color) {
+                var li = document.createElement('li');
+                li.innerHTML = "ID: " + color.id + ", Color Name: " + color.color_name;
+                colorList.appendChild(li);
+            });
+        });
+    
+        function queryColorsByColorName() {
+            var colorName = prompt("请输入要查询的颜色名称:");
+            socket.emit('query_colors_by_color_name', colorName);
+        }
+        function deleteColor(colorName) {
+        var confirmation = confirm("确定要删除颜色: " + colorName + " ?");
+            if (confirmation) {
+                socket.emit('delete_color', colorName);
+            }
+        }
+        // 接收颜色删除事件，并更新页面颜色列表
+        socket.on('color_deleted', function(colorName) {
+            var colorList = document.getElementById('colorList');
+            var colorItems = colorList.getElementsByTagName('li');
+            for (var i = 0; i < colorItems.length; i++) {
+                var colorItem = colorItems[i];
+                if (colorItem.innerHTML.includes("Color Name: " + colorName)) {
+                    colorItem.remove();
+                    break;
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>智能衣櫃</h1>
+    <ul id="colorList">
+        {% for color in colors %}
+        <li>
+            ID: {{ color.id }}, Color Name: {{ color.color_name }}
+            <button onclick="deleteColor('{{ color.color_name }}')">删除</button>
+        </li>
+        {% endfor %}
+    </ul>
+    <button onclick="queryColorsByColorName()">衣服查詢</button>
+</body>
+
+</html>

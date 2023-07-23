@@ -30,6 +30,7 @@ class ColorDetection():
         self.img = cv2.resize(self.img, dim, interpolation=cv2.INTER_AREA)
 
         self.imgOriginal = self.img.copy()
+        
 
     def enhance(self, img: np.ndarray, brightness=0, contrast=100):
         # [【OpenCV】8 - 運用 OpenCV 改變圖片的對比度 modify contrast (內含：網路上常見錯誤調整對比度方式的分析)](https://www.wongwonggoods.com/python/python_opencv/opencv-modify-contrast/)
@@ -224,14 +225,17 @@ class ColorDetection():
         self.imgCropped = self.crop(self.img, percent=self.CROP_PERCENTAGE)
         self.compareImage()
 
-        color = self.colorName(self.imgCropped)
-        print(f"The dominant color is {color}.")
+        color1 = self.colorName(self.imgCropped)
+        print(f"The dominant color is {color1}.")
         cv2.destroyAllWindows()
 
-        if color == "red":
-            print("The complementary color of red is GREEN!")
-        elif color == "blue":
-            print("The complementary color of blue is YELLOW!")
+        return color1
+
+        # if color == "red":
+        #     print("The complementary color of red is GREEN!")
+        # elif color == "blue":
+        #     print("The complementary color of blue is YELLOW!")
+
 
 
 def main():
