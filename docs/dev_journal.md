@@ -1,6 +1,10 @@
 # Dev Journal
+<<<<<<< HEAD
 - 黃沛婕
 
+=======
+- Max test
+>>>>>>> 76ecd5176cba0dc40da0789e4c56a911cf4b0f24
 # Python
 
 ## Coding Style
@@ -81,3 +85,4 @@ docker run hello-world
 
 
 [docker环境里安装opencv ImportError: libGL.so.1: cannot open shared object file: No such file or directory\_docker qt libgl.so.1\_Max\_ZhangJF的博客-CSDN博客](https://blog.csdn.net/Max_ZhangJF/article/details/108920050)
+
