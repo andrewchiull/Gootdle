@@ -1,10 +1,8 @@
 # Dev Journal
-
 - marshall
 - 黃沛婕
 - yushan
-- Max test
-
+- Max 
 # Python
 
 ## Coding Style
