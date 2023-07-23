@@ -1,13 +1,10 @@
 # Dev Journal
-<<<<<<< HEAD
-- marshall
-=======
 
+- marshall
 - 黃沛婕
 - yushan
 - Max test
 
->>>>>>> 554bf3ebde29858aa5ebf7786b4bd35ddadfa2f0
 # Python
 
 ## Coding Style
