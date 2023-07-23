@@ -1,10 +1,9 @@
 # Dev Journal
-<<<<<<< HEAD
-- 黃沛婕
 
-=======
+- 黃沛婕
+- yushan
 - Max test
->>>>>>> 76ecd5176cba0dc40da0789e4c56a911cf4b0f24
+
 # Python
 
 ## Coding Style
