@@ -1,5 +1,5 @@
 # Dev Journal
-- Max
+- Max test
 # Python
 
 ## Coding Style
