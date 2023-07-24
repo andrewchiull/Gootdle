@@ -1,8 +1,12 @@
 # Dev Journal
-- marshall
-- 黃沛婕
-- yushan
-- Max 
+
+- Authors
+    - marshall
+    - 黃沛婕
+    - yushan
+    - Max
+    - Andrew
+
 # Python
 
 ## Coding Style
@@ -14,27 +18,58 @@
 ```
 
 # Raspberry Pi
-## 不知道 RPi 的 id，沒辦法 ssh
+
+
+## ssh RPi 的 hostname 沒有用
+
+要寫成 hostname.local
+
+## 不知道 RPi 的 IP，沒辦法 ssh
 
 ```bash
 # 2023-07-21 19:42:24
 # nmap 可以掃同網域內其他 ip
 # [祕密基地: Mac 安裝 Nmap](http://secretbase2000.blogspot.com/2019/11/mac-nmap.html)
 brew install nmap
+
+# 給一個 ip 範圍
+nmap -sP "192.168.1.101-110"
+# 或是全掃（會比較慢）
+nmap -sP "192.168.1.*"
 ```
 
+
+## 沒有網路的情況下連接 RPi (Mac)
+
+[Connect to your Raspberry Pi from a Mac](https://www.dexterindustries.com/BrickPi/brickpi-tutorials-documentation/getting-started/using-the-pi/connect-to-your-raspberry-pi-from-a-mac/)
+
+## 分享網路給 RPi (Mac)
+
+[Direct ethernet connection | The Raspberry Pi Guide](https://raspberrypi-guide.github.io/networking/create-direct-ethernet-connection)
+
+
+## 把 RPi 的 HDMI 訊號用 USB 輸入到電腦（反之亦然）
+
+可以把電腦的螢幕畫面當成 Webcam 訊號給 RPi。
+
+[VC01 USB3.0轉HDMI影像擷取卡 - PChome 24h購物](https://24h.pchome.com.tw/prod/DCAX3W-A900EQPPF-000)
+[BENEVO 4K版 50cm HDMI2.0影音連接線(滿芯) - PChome 24h購物](https://24h.pchome.com.tw/prod/DCACXR-A900G6OTS-000)
 
 # Opencv
 
 ## Installation
 
 ```bash
-# 在實際安裝opencv之前，需要先安裝一些opencv相關支援套件。
+# 需要先安裝一些 opencv 相關支援套件。
 sudo apt-get install –y libhdf5-dev
 sudo apt-get install –y libatlas-base-dev
 sudo apt-get install –y libjasper-dev
 
+pip install numpy==1.22.3
+pip install opencv-python==4.5.5.64
 
+# Optional
+pip install matplotlib==3.3.4
 ```
 
 
@@ -53,22 +88,22 @@ nano ~/.zshrc
 # export PATH="/Directory1:$PATH"
 ```
 
-## Git/GitHub
+# Git/GitHub
 
-### Tutorial
+## Tutorial
 
 [連猴子都能懂的Git入門指南 | 貝格樂（Backlog）](https://backlog.com/git-tutorial/tw/)
 
 
-## Docker
+# Docker
 
-### Installation
+## Installation
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 ```
 
-### If permission denied
+## If permission denied
 [How to fix docker: Got permission denied issue - Stack Overflow](https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue)
 ```bash
 sudo groupadd docker
@@ -77,10 +112,14 @@ newgrp docker
 docker run hello-world
 ```
 
-### Dockerfile
+## Dockerfile
 
 [打造最小 Python Docker 容器 - 小惡魔 - AppleBOY](https://blog.wu-boy.com/2021/07/building-minimal-docker-containers-for-python-applications/)
 
 
 [docker环境里安装opencv ImportError: libGL.so.1: cannot open shared object file: No such file or directory\_docker qt libgl.so.1\_Max\_ZhangJF的博客-CSDN博客](https://blog.csdn.net/Max_ZhangJF/article/details/108920050)
 
+
+## opencv-python Installation
+
+[francoisgervais/opencv-python - Docker Image | Docker Hub](https://hub.docker.com/r/francoisgervais/opencv-python/)
