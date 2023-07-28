@@ -31,7 +31,7 @@ class Camera:
 
 def main():
     camera = Camera()
-    camera.run()
+    camera.run("./cv/test_input_video/white_tshirt.MOV")
 
 
 if __name__ == "__main__":
