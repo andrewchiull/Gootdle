@@ -154,18 +154,11 @@ docker build -t my-python-app .
 docker run -it --rm --name my-running-app my-python-app
 ```
 
-## docker-compose
-
-```bash
-# Installation on RPi
-sudo curl -SL https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-sudo chmod 777 -R /usr/local/bin/docker-compose
-sudo pip install docker-compose
-```
+## Compose
 
 ```bash
 # build
-docker-compose up -d --build
+docker compose -f docker-compose-rpi.yml up -d
 docker ps
 docker exec -it python-server sh -c "echo Hi"
 docker exec -it python-server sh -c "python3 test_docker_volume.py"

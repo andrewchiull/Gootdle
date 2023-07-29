@@ -1,8 +1,13 @@
 # User defined
 .ignore/
 
+# Mac
+.DS_Store
+
 # Video files
 *.mov
+
+
 
 # The followings are recommended by GitHub
 

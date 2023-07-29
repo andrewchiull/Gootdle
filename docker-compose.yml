@@ -7,7 +7,3 @@ services:
       - 88:88
     volumes:
       - .:/code
-    devices:
-      - /dev/video0:/dev/video0
-    # depends_on:
-    #   - redis
