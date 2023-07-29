@@ -17,6 +17,19 @@
 # [Structuring Your Project — The Hitchhiker's Guide to Python](https://docs.python-guide.org/writing/structure/)
 ```
 
+# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder)
+
+```python
+# setup.py
+from setuptools import setup, find_packages
+
+setup(name='myproject', version='1.0', packages=find_packages())
+```
+
+```bash
+pip install -e .
+```
+
 # Raspberry Pi
 
 
@@ -97,6 +110,10 @@ nano ~/.zshrc
 
 # Docker
 
+## Dev in docker
+
+[(10) How to create a great dev environment with Docker - YouTube](https://www.youtube.com/watch?v=0H2miBK_gAk&ab_channel=PatrickLoeber)
+
 ## Installation
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -123,3 +140,10 @@ docker run hello-world
 ## opencv-python Installation
 
 [francoisgervais/opencv-python - Docker Image | Docker Hub](https://hub.docker.com/r/francoisgervais/opencv-python/)
+
+## Build and Run
+
+```bash
+docker build -t my-python-app .
+docker run -it --rm --name my-running-app my-python-app
+```

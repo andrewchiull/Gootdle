@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    container_name: python-server
+    command: python3 ./test_docker_volume.py
+    ports:
+      - 80:80
+    volumes:
+      - .:/code
+      - /dev/video0:/dev/video0
+    # depends_on:
+    #   - redis

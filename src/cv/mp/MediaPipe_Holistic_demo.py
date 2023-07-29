@@ -1,3 +1,5 @@
+import var
+
 # [mediapipe/docs/solutions/holistic.md at master · google/mediapipe](https://github.com/google/mediapipe/blob/master/docs/solutions/holistic.md)
 
 import cv2
@@ -55,7 +57,7 @@ with mp_holistic.Holistic(
         results.pose_world_landmarks, mp_holistic.POSE_CONNECTIONS)
 
 # For webcam input:
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(var.VIDEO_PATH)
 with mp_holistic.Holistic(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as holistic:
