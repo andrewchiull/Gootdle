@@ -68,6 +68,12 @@ nmap -sP "192.168.1.*"
 [VC01 USB3.0轉HDMI影像擷取卡 - PChome 24h購物](https://24h.pchome.com.tw/prod/DCAX3W-A900EQPPF-000)
 [BENEVO 4K版 50cm HDMI2.0影音連接線(滿芯) - PChome 24h購物](https://24h.pchome.com.tw/prod/DCACXR-A900G6OTS-000)
 
+## Sync with .gitignore
+
+[explainshell.com - rsync -avhr \~/Google-HPS-2023-Team8 andrew@andrewrpi.local:\~ --include='\*\*.gitignore' --exclude='/.git' --filter=':- .gitignore' --delete-after](https://explainshell.com/explain?cmd=rsync+-avhr+%7E%2FGoogle-HPS-2023-Team8+andrew%40andrewrpi.local%3A%7E+--include%3D%27**.gitignore%27+--exclude%3D%27%2F.git%27+--filter%3D%27%3A-+.gitignore%27+--delete-after)
+
+[git - rsync exclude according to .gitignore & .hgignore & svn:ignore like --filter=:C - Stack Overflow](https://stackoverflow.com/questions/13713101/rsync-exclude-according-to-gitignore-hgignore-svnignore-like-filter-c)
+
 # Opencv
 
 ## Installation
@@ -146,4 +152,21 @@ docker run hello-world
 ```bash
 docker build -t my-python-app .
 docker run -it --rm --name my-running-app my-python-app
+```
+
+## docker-compose
+
+```bash
+# Installation on RPi
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+sudo chmod 777 -R /usr/local/bin/docker-compose
+sudo pip install docker-compose
+```
+
+```bash
+# build
+docker-compose up -d --build
+docker ps
+docker exec -it python-server sh -c "echo Hi"
+docker exec -it python-server sh -c "python3 test_docker_volume.py"
 ```

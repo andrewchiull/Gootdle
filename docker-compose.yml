@@ -2,11 +2,12 @@ services:
   app:
     build: .
     container_name: python-server
-    command: python3 ./test_docker_volume.py
+    command: sleep infinity
     ports:
-      - 80:80
+      - 88:88
     volumes:
       - .:/code
+    devices:
       - /dev/video0:/dev/video0
     # depends_on:
     #   - redis
