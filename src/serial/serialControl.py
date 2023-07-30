@@ -1,25 +1,21 @@
 import time
 import serial
 
+import settings
+
 
 class SerialControl():
     command = None
 
     def setupSerial(self):
         try:
-            self.ser = serial.Serial('/dev/ttyACM1', 9600, timeout=0.1)
+            s = settings.Settings()
+            ser = serial.Serial(s.ARDUINO_PATH, 9600, timeout=0.1)
+            ser.reset_input_buffer()
+            self.ser = ser
+
         except serial.SerialException as e:
             self.print(e)
-            try:
-                self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0.1)
-            except serial.SerialException as e:
-                self.print(e)
-                try:
-                    self.ser = serial.Serial('/dev/tty.usbmodem1411201', 9600, timeout=0.1)
-                except serial.SerialException as e:
-                    self.print(e)
-                    return
-                return
             return
 
         self.ser.reset_input_buffer()

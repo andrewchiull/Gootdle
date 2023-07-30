@@ -1,6 +1,4 @@
 {
     "board": "arduino:avr:uno",
-    "port": "/dev/tty.usbmodem1411201",
-    "programmer": "avrispmkii",
-    "sketch": "src/arduino/force_sensor/force_sensor.ino"
+    "port": "/dev/tty.usbmodem1411201"
 }
