@@ -1,10 +1,11 @@
+import settings
 
 # [Raspberry Pi Arduino Serial Communication - Everything You Need To Know - The Robotics Back-End](https://roboticsbackend.com/raspberry-pi-arduino-serial-communication/)
 
 import serial
 import time
 if __name__ == '__main__':
-    ser = serial.Serial('/dev/tty.usbmodem1411201', 9600, timeout=0.1)
+    ser = serial.Serial(settings.ARDUINO_PATH, 9600, timeout=0.1)
     ser.reset_input_buffer()
 
     greeting =  "Connecting to Arduino..."

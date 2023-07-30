@@ -11,17 +11,9 @@ WORKDIR /code
 RUN apt-get update ; apt-get install -y libatomic1
 
 # install dependencies
-# COPY ./requirements.txt ./
-# RUN pip install --no-cache-dir --upgrade -r requirements.txt
+COPY ./requirements.txt ./
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder)
 COPY setup.py ./
 RUN pip install --no-cache-dir -e .
-
-
-
-# copy the src to the folder
-COPY ./src ./src
-COPY ./test_docker_volume.py .
-
-CMD [ "python3", "-V" ]
