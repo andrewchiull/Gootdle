@@ -51,17 +51,6 @@
                 }
             }
         });
-        
-        // var isLoading = false; // Flag to prevent infinite refresh loop
-
-        // function loadNextClothing() {
-        //     if (!isLoading) {
-        //     isLoading = true;
-        //     socket.emit('query_clothing');
-        //     location.reload();
-        // }
-        // }
-
 
 
         socket.on('clothing_data', function(data) {
