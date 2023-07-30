@@ -31,12 +31,14 @@
             var colorName = prompt("请输入要查询的颜色名称:");
             socket.emit('query_colors_by_color_name', colorName);
         }
+
         function deleteColor(colorName) {
         var confirmation = confirm("确定要删除颜色: " + colorName + " ?");
             if (confirmation) {
                 socket.emit('delete_color', colorName);
             }
         }
+        
         // 接收颜色删除事件，并更新页面颜色列表
         socket.on('color_deleted', function(colorName) {
             var colorList = document.getElementById('colorList');
@@ -49,6 +51,87 @@
                 }
             }
         });
+        
+        var isLoading = false; // Flag to prevent infinite refresh loop
+
+        // function loadNextClothing() {
+        //     if (!isLoading) {
+        //     isLoading = true;
+        //     socket.emit('query_clothing');
+        //     location.reload();
+        // }
+        // }
+
+        socket.on('clothing_data', function(data) {
+            var currentIndex = 0;
+            isLoading = false; 
+            
+            function updateClothingInfo(index) {
+    
+                console.log("data")
+                console.log(data)
+                console.log("index")
+                console.log(index)
+                
+                var clothing = data[index];
+
+
+                var clothingPhoto = document.getElementById('clothingPhoto');
+                
+                
+                
+                console.log("clothing.photo_path")
+                console.log(clothing.photo_path)
+                console.log("clothingPhoto")
+                console.log(clothingPhoto)
+                console.log("clothingPhoto.src")
+                console.log(clothingPhoto.src)
+                
+                clothingPhoto.src = clothing.photo_path; // 设置照片路径
+
+                var clothingInfo = document.getElementById('clothingInfo');
+                clothingInfo.innerHTML = "ID: " + clothing.id + "<br>" +
+                                         "Color: " + clothing.colo_namer + "<br>" +
+                                         "Slot Location: " + clothing.slot_location + "<br>" +
+                                         "Season: " + clothing.season + "<br>" +
+                                         "Clothing Type: " + clothing.clothing_type;
+            }
+
+            updateClothingInfo(currentIndex);
+
+            function switchClothing(offset) {
+                currentIndex += offset;
+                currentIndex = data.length % currentIndex
+                updateClothingInfo(currentIndex);
+            }
+
+            document.getElementById('prev').addEventListener('click', function() {
+                console.log("prev clicked");
+                switchClothing(-1);
+                loadNextClothing(); // Load the next clothing data
+            });
+
+            document.getElementById('next').addEventListener('click', function() {
+                console.log("next clicked");
+                switchClothing(1);
+                loadNextClothing(); // Load the next clothing data
+
+            });
+            // 
+        });
+
+        function queryClothing() {
+            socket.emit('query_clothing');
+        }
+
+        socket.on('connect', function() {
+            console.log('WebSocket 連接成功');
+            queryClothing();
+        });
+
+        // loadNextClothing();
+
+      
     </script>
 </head>
 <body>
@@ -61,7 +144,18 @@
         </li>
         {% endfor %}
     </ul>
-    <button onclick="queryColorsByColorName()">衣服查詢</button>
+    <div id="clothingInfo">
+        <!-- 用于显示 Clothing 记录的内容 -->
+        <p>ID: </p>
+        <p>Color: </p>
+        <img id="clothingPhoto" src="" alt="Clothing Photo">
+        <p>Slot Location: </p>
+        <p>Season: </p>
+        <p>Clothing Type: </p>
+    </div>
+    <button id="prev">上一条</button>
+    <button id="next">下一条</button>
+    
 </body>
 
 </html>

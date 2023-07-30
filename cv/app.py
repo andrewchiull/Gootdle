@@ -55,29 +55,49 @@ def recognize_color_once(frame):
     # 返回颜色名称
     return color_result  # 示例颜色
 
+# 创建数据库模型
+class Clothing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    colo_namer = db.Column(db.String(50), nullable=False)
+    photo_path = db.Column(db.String(200))
+    slot_location = db.Column(db.String(50))
+    season = db.Column(db.String(50))
+    clothing_type = db.Column(db.String(50))
+
+    def __repr__(self):
+        return f"<Clothing {self.color}>"
+
+@socketio.on('query_clothing', namespace='/')
+def query_clothing():
+    clothing = Clothing.query.all()
+    clothing_data = [{'id': c.id, 'colo_namer': c.colo_namer, 'photo_path': c.photo_path,
+                      'slot_location': c.slot_location, 'season': c.season, 'clothing_type': c.clothing_type}
+                     for c in clothing]
+    emit('clothing_data', clothing_data)
+
 # 主要逻辑
 if __name__ == '__main__':
-    with app.app_context():  # 创建应用上下文
-        db.create_all()  # 创建数据库表
+    with app.app_context():
+        db.create_all()
 
-    cap = cv2.VideoCapture(0)  # 打开摄像头
-    while True:
-        ret, frame = cap.read()
-        cv2.imshow('Frame', frame)
+    # cap = cv2.VideoCapture(0)  # 打开摄像头
+    # while True:
+    #     ret, frame = cap.read()
+    #     cv2.imshow('Frame', frame)
 
-        # 颜色识别逻辑仅在按下 "esc" 键时执行一次
-        if cv2.waitKey(1) & 0xFF == 27:  # 按下"esc"键
-            color = recognize_color_once(frame)
-            print(f"The dominant color is {color}.")
-            # 将颜色信息保存到数据库
-            with app.app_context():  # 使用应用上下文
-                db.session.add(Color(color_name=color))
-                db.session.commit()
+    #     # 颜色识别逻辑仅在按下 "esc" 键时执行一次
+    #     if cv2.waitKey(1) & 0xFF == 27:  # 按下"esc"键
+    #         color = recognize_color_once(frame)
+    #         print(f"The dominant color is {color}.")
+    #         # 将颜色信息保存到数据库
+    #         with app.app_context():  # 使用应用上下文
+    #             db.session.add(Color(color_name=color))
+    #             db.session.commit()
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):  # 按下"q"键退出
-            break
+    #     if cv2.waitKey(1) & 0xFF == ord('q'):  # 按下"q"键退出
+    #         break
 
-    cap.release()
-    cv2.destroyAllWindows()
+    # cap.release()
+    # cv2.destroyAllWindows()
 
     app.run()  # 启动Flask应用
