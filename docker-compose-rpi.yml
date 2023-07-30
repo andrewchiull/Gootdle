@@ -1,0 +1,7 @@
+services:
+  rpiapp:
+    extends:
+      file: docker-compose.yml
+      service: app
+    devices:
+      - /dev/video0:/dev/video0 # RPi only. Not availible on Mac.

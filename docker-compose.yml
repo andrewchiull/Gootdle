@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: python-server
+    command: sleep infinity
+    ports:
+      - 88:88
+    volumes:
+      - .:/code
