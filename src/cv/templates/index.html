@@ -52,7 +52,7 @@
             }
         });
         
-        var isLoading = false; // Flag to prevent infinite refresh loop
+        // var isLoading = false; // Flag to prevent infinite refresh loop
 
         // function loadNextClothing() {
         //     if (!isLoading) {
@@ -62,46 +62,43 @@
         // }
         // }
 
+
+
         socket.on('clothing_data', function(data) {
             var currentIndex = 0;
             isLoading = false; 
             
             function updateClothingInfo(index) {
-    
-                console.log("data")
-                console.log(data)
-                console.log("index")
-                console.log(index)
-                
                 var clothing = data[index];
+                var clothingInfo = document.getElementById('clothingInfo');
 
-
-                var clothingPhoto = document.getElementById('clothingPhoto');
-                
-                
-                
-                console.log("clothing.photo_path")
-                console.log(clothing.photo_path)
-                console.log("clothingPhoto")
-                console.log(clothingPhoto)
-                console.log("clothingPhoto.src")
-                console.log(clothingPhoto.src)
-                
-                clothingPhoto.src = clothing.photo_path; // 设置照片路径
+                clothingInfo.innerHTML = `
+                    <p>ID: ${clothing.id}</p>
+                    <p>Color: ${clothing.colo_namer}</p>
+                    <img id="clothingPhoto" src="${clothing.photo_path}" alt="Clothing Photo">
+                    <p>Slot Location: ${clothing.slot_location}</p>
+                    <p>Season: ${clothing.season}</p>
+                    <p>Clothing Type: ${clothing.clothing_type}</p>
+                `;
 
                 var clothingInfo = document.getElementById('clothingInfo');
-                clothingInfo.innerHTML = "ID: " + clothing.id + "<br>" +
-                                         "Color: " + clothing.colo_namer + "<br>" +
-                                         "Slot Location: " + clothing.slot_location + "<br>" +
-                                         "Season: " + clothing.season + "<br>" +
-                                         "Clothing Type: " + clothing.clothing_type;
+                console.log("clothingInfo")
+                console.log(clothingInfo)
             }
 
             updateClothingInfo(currentIndex);
 
             function switchClothing(offset) {
+                console.log("currentIndex")
+                console.log(currentIndex)
+
+                console.log("offset")
+                console.log(offset)
+
                 currentIndex += offset;
-                currentIndex = data.length % currentIndex
+                currentIndex = currentIndex % data.length;
+                console.log("currentIndex");
+                console.log(currentIndex);
                 updateClothingInfo(currentIndex);
             }
 
@@ -144,17 +141,9 @@
         </li>
         {% endfor %}
     </ul>
-    <div id="clothingInfo">
-        <!-- 用于显示 Clothing 记录的内容 -->
-        <p>ID: </p>
-        <p>Color: </p>
-        <img id="clothingPhoto" src="" alt="Clothing Photo">
-        <p>Slot Location: </p>
-        <p>Season: </p>
-        <p>Clothing Type: </p>
-    </div>
-    <button id="prev">上一条</button>
-    <button id="next">下一条</button>
+    <div id="clothingInfo"></div>
+    <button id="prev">上一件</button>
+    <button id="next">下一件</button>
     
 </body>
 
