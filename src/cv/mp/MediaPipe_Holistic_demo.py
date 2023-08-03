@@ -57,12 +57,15 @@ with mp_holistic.Holistic(
         results.pose_world_landmarks, mp_holistic.POSE_CONNECTIONS)
 
 # For webcam input:
-cap = cv2.VideoCapture(var.VIDEO_PATH)
+cap = cv2.VideoCapture(S.VIDEO_SOURCE)
 with mp_holistic.Holistic(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as holistic:
   while cap.isOpened():
     success, image = cap.read()
+    
+    image = cv2.resize(image, None, fx=0.2, fy=0.2) # Reduce the size
+    
     if not success:
       print("Ignoring empty camera frame.")
       # If loading a video, use 'break' instead of 'continue'.
@@ -90,8 +93,13 @@ with mp_holistic.Holistic(
         mp_holistic.POSE_CONNECTIONS,
         landmark_drawing_spec=mp_drawing_styles
         .get_default_pose_landmarks_style())
+
     # Flip the image horizontally for a selfie-view display.
-    cv2.imshow('MediaPipe Holistic', cv2.flip(image, 1))
+    cv2.imshow('MediaPipe Holistic',
+               image
+              #  cv2.flip(image, 1) # DONT Flip
+               )
+
     if cv2.waitKey(5) & 0xFF == 27:
       break
 cap.release()

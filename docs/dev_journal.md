@@ -17,7 +17,8 @@
 # [Structuring Your Project — The Hitchhiker's Guide to Python](https://docs.python-guide.org/writing/structure/)
 ```
 
-# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder)
+
+# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder/50194143#50194143)
 
 ```python
 # setup.py
