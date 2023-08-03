@@ -16,12 +16,12 @@ def main():
     thread.start()
 
     try:
-        serial_controller.command = "Start"
+        serial_controller._data = "Start"
         while True:
             time.sleep(0.1)
             print(">>> Command: ", end="")
             
-            serial_controller.command = input()
+            serial_controller._data = input()
     except KeyboardInterrupt:
         print("Stopping...")
 

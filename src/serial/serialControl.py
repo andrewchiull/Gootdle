@@ -1,28 +1,20 @@
 import time
 import serial
 
-import settings
-
-
 class SerialControl():
-    command = None
-
-    def setupSerial(self):
+    def __init__(self, port: str, baudrate=9600):
+        self._data = None
         try:
-            s = settings.Settings()
-            ser = serial.Serial(s.ARDUINO_PATH, 9600, timeout=0.1)
-            ser.reset_input_buffer()
-            self.ser = ser
+            self.ser = serial.Serial(port, baudrate, timeout=1)
+            self.ser.reset_input_buffer()
+            self.running = False
 
         except serial.SerialException as e:
-            self.print(e)
+            print(e)
             return
 
-        self.ser.reset_input_buffer()
-
         greeting =  "Connecting to Arduino..."
-        self.print(greeting)
-        self.ser.write(f"{greeting}\n".encode('utf-8'))
+        print(greeting)
 
         count_try = 0
         while True:
@@ -40,27 +32,24 @@ class SerialControl():
                 break
             time.sleep(1/5)
 
-    def writeSerial(self, command: str):
-        self.print(f"<<< {command}")
-        self.ser.write(f"{command}\n".encode('utf-8'))
-        self.readSerial()
+    def write(self, data: str):
+        print(f"<<< {data}")
+        self.ser.write(f"{data}\n".encode('utf-8'))
 
-    def readSerial(self):
-        # Read echo
-        while True:
-            line = self.ser.readline().decode('utf-8').rstrip()
-            if line == "":
-                break
-            self.print(f">>> {line}")
-
-    def print(self, text: str = ""):
-        print(text)
+    def read(self):
+        while self.ser.in_waiting():
+            data = self.ser.readline().decode('utf-8').rstrip()
+            print(f">>> {data}")
 
     def run(self):
-        self.setupSerial()
-        while True:
-            if self.command is not None:
-                self.writeSerial(self.command)
-                self.command = None
-            self.readSerial()
+        self.running = True
+        while self.running:
+            if self._data is not None:
+                self.write(self._data)
+                self._data = None
+            self.read()
 
+
+    def stop(self):
+        self.running = False
+        self.ser.close()
