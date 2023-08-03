@@ -25,8 +25,9 @@ class Clock:
     def stop(self):
         self.running = False
 
+clock = Clock()
+
 if __name__ == "__main__":
-    clock = Clock()
     thread = threading.Thread(target=clock.run)
     thread.start()
 
