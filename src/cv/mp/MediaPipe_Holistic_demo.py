@@ -4,20 +4,17 @@
 import numpy as np
 import cv2
 import mediapipe as mp
-from src.cv.clock import clock
-
-import timeit
 
 import imutils
 from imutils.video import WebcamVideoStream
 from imutils.video import FPS
 
+from settings import S
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_holistic = mp.solutions.holistic
 
-from settings import S
 
 # # For static images:
 # IMAGE_FILES = []
@@ -71,11 +68,13 @@ from settings import S
 # For webcam input:
 # cap = cv2.VideoCapture(S.VIDEO_SOURCE)
 cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
+# cap = cv2.VideoCapture(0)
+# cap = WebcamVideoStream(src=0).start()
 fps = FPS().start()
 with mp_holistic.Holistic(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as holistic:
-  holistic
+
   while cap.grabbed:
     fps.update()
 
@@ -88,13 +87,8 @@ with mp_holistic.Holistic(
     # pass by reference.
     image.flags.writeable = False
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    # start = timeit.default_timer()
-
     results = holistic.process(image)
 
-    # print("The difference of time is :",
-    #               timeit.default_timer() - start)
     # Draw landmark annotation on the image.
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
