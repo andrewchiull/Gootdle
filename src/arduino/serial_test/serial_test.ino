@@ -9,7 +9,7 @@ void setup() {
 void loop() {
   if (Serial.available() > 0) {
     String data = Serial.readStringUntil('\n');
-    Serial.print("You sent me: ");
+    Serial.print("Arduino received: ");
     Serial.println(data);
   }
 }

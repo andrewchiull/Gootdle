@@ -1,13 +1,12 @@
-# import the necessary packages
+# Based on 
+# from imutils.video import WebcamVideoStream
 from threading import Thread
 import numpy as np
 import cv2
 import mediapipe as mp
 
 
-import imutils
-from imutils.video import WebcamVideoStream
-from imutils.video import FPS
+
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles

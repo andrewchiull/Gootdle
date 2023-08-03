@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     ROOT: Path = Path(__file__).parent # Root of the project
     OS: str = platform.system()
-    ARDUINO_PATH: Path = ("/dev/ttyACM0" if OS == "Linux" # docker or RPi
+    ARDUINO_PATH: str = ("/dev/ttyACM0" if OS == "Linux" # docker or RPi
                     else "/dev/tty.usbmodem1411201") # "Darwin" (macOS)
 
     VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/white_tshirt.MOV")

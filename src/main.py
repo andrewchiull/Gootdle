@@ -1,27 +1,22 @@
 import threading
 import time
 
+from settings import S
 
-from src.cv import camera
-from src.serial import serialControl
-
-cam = camera.Camera()
-ser = serialControl.SerialControl()
-
-
+from src.arduino.arduino import ArduinoThread
 
 def main():
-    serial_controller = ser
-    thread = threading.Thread(target=serial_controller.run)
-    thread.start()
+    arduino = ArduinoThread(port=S.ARDUINO_PATH)
+    thread_arduino = threading.Thread(target=arduino.update)
+    thread_arduino.start()
 
     try:
-        serial_controller._data = "Start"
+        arduino._write = "Start"
         while True:
             time.sleep(0.1)
             print(">>> Command: ", end="")
             
-            serial_controller._data = input()
+            arduino._write = input()
     except KeyboardInterrupt:
         print("Stopping...")
 
