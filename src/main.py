@@ -1,4 +1,3 @@
-import threading
 import time
 
 from settings import S
@@ -6,19 +5,13 @@ from settings import S
 from src.arduino.arduino import ArduinoThread
 
 def main():
-    arduino = ArduinoThread(port=S.ARDUINO_PATH)
-    thread_arduino = threading.Thread(target=arduino.update)
-    thread_arduino.start()
-
-    try:
-        arduino._write = "Start"
+    with ArduinoThread(port=S.ARDUINO_PATH) as arduino:
+        arduino.write_line("Hello world")
         while True:
-            time.sleep(0.1)
-            print(">>> Command: ", end="")
-            
-            arduino._write = input()
-    except KeyboardInterrupt:
-        print("Stopping...")
+            time.sleep(1)
+            data = {"command": "read_sensors"} # TODO pydantic validation
+            print(data)
+            arduino.write_json(data)
 
 if __name__ == "__main__":
     main()

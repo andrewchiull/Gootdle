@@ -1,10 +1,12 @@
 # [pySerial API — pySerial 3.4 documentation](https://pyserial.readthedocs.io/en/latest/pyserial_api.html#serial.threaded.ReaderThread)
 
 import sys
+import threading
 import time
 import traceback
 import serial
 from serial.threaded import LineReader, ReaderThread
+import json
 
 from settings import S
 
@@ -12,17 +14,31 @@ class PrintLines(LineReader):
     
     def connection_made(self, transport):
         super(PrintLines, self).connection_made(transport)
+        while not self.transport.serial.in_waiting:
+            time.sleep(1)
+            sys.stdout.write("Waiting...\n")
+
         sys.stdout.write(f'Port {transport.serial.port} is opened\n')
-        self.write_line('hello world')
+
+    def write_line(self, text: str) -> None:
+        sys.stdout.write(f"Sent: {text}\n")
+        return super().write_line(text)
 
     def handle_line(self, data: str):
-        data = data.rstrip() # Remove '\r'
-        sys.stdout.write('>>> {}\n'.format(repr(data)))
+        data = data.rstrip() # Remove '\r' or '\n'
+        sys.stdout.write(f'>>> {data!r}\n')
 
-    def connection_lost(self, exc):
-        if exc:
-            traceback.print_exc(exc)
+    def connection_lost(self, exc: Exception) -> None:
         sys.stdout.write('Serial port is closed\n')
+
+        try:
+            super().connection_lost(exc)
+        except Exception:
+            traceback.print_exception()
+
+    def write_json(self, data: dict) -> None:
+        text = json.dumps(data)
+        return super().write_line(text)
 
 class ArduinoThread(ReaderThread):
     def __init__(self, port: str) -> None:
