@@ -1,5 +1,3 @@
-import var
-
 # [mediapipe/docs/solutions/holistic.md at master · google/mediapipe](https://github.com/google/mediapipe/blob/master/docs/solutions/holistic.md)
 
 import cv2
@@ -7,6 +5,8 @@ import mediapipe as mp
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_holistic = mp.solutions.holistic
+
+from settings import S
 
 # For static images:
 IMAGE_FILES = []

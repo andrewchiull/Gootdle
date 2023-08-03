@@ -1,2 +1,2 @@
-import settings
-print(settings.ROOT_DIR)
+from settings import S
+print(S.ROOT_DIR)

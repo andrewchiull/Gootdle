@@ -8,3 +8,6 @@ class Settings:
     OS: str = platform.system()
     ARDUINO_PATH: Path = ("/dev/ttyACM0" if OS == "Linux" # docker or RPi
                     else "/dev/tty.usbmodem1411201") # "Darwin" (macOS)
+
+
+S = Settings()

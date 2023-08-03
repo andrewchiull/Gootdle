@@ -2,7 +2,7 @@ import serial
 import threading
 import time
 
-from settings import Settings
+from settings import S
 
 class ArduinoReader(threading.Thread):
     def __init__(self, port, baudrate=9600):
@@ -30,8 +30,7 @@ class ArduinoReader(threading.Thread):
 
 
 if __name__ == "__main__":
-    s = Settings()
-    arduino = ArduinoReader(port=s.ARDUINO_PATH, baudrate=9600)  # replace with your port and baudrate
+    arduino = ArduinoReader(port=S.ARDUINO_PATH, baudrate=9600)  # replace with your port and baudrate
     arduino.start()
 
     try:
