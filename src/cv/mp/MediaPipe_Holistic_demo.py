@@ -1,5 +1,6 @@
 # [mediapipe/docs/solutions/holistic.md at master · google/mediapipe](https://github.com/google/mediapipe/blob/master/docs/solutions/holistic.md)
 
+import numpy as np
 import cv2
 import mediapipe as mp
 mp_drawing = mp.solutions.drawing_utils
@@ -62,6 +63,8 @@ with mp_holistic.Holistic(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as holistic:
   while cap.isOpened():
+    
+    if (FPS == 30): continue
     success, image = cap.read()
     
     image = cv2.resize(image, None, fx=0.2, fy=0.2) # Reduce the size
