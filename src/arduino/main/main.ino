@@ -9,7 +9,6 @@
 #define LED_1 8
 
 float DELAY_TIME = 100;
-DynamicJsonDocument doc(1024);
 
 void setup() {
     // put your setup code here, to run once:
@@ -44,25 +43,29 @@ void loop() {
     Serial.print("Arduino received: ");
     Serial.println(data);
 
+    DynamicJsonDocument doc(1024);
     deserializeJson(doc, data);
 
-
-    auto sender = doc["sender"];
-    auto command = doc["command"];
+    String command = doc["command"];
+    Serial.println(command);
 
     if (command == "read_sensors") {
-        // read and send data to RPi
-        Serial.println("Read sensors");
-
         auto sensors = doc["sensors"];
-        sensors[0] = analogRead(LED_0);
+        sensors[0] = analogRead(FORCE_SENSOR_0);
         for (int i = 0; i < SLOTS_SIZE; i++) {
-            sensors[1+i] = analogRead(LED_1 + i);
+            sensors[1+i] = analogRead(FORCE_SENSOR_1 + i);
+        }
+
+    } else if (command == "write_leds") {
+        auto leds = doc["leds"];
+        digitalWrite(LED_0, leds[0]);
+        for (int i = 0; i < SLOTS_SIZE; i++) {
+            digitalWrite(LED_1 + i, leds[1+i]);
         }
 
     }
 
-    sender = "arduino";
+    doc["sender"] = "arduino";
     serializeJson(doc, Serial);
     Serial.println();
     delay(DELAY_TIME);

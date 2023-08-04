@@ -8,7 +8,7 @@ from serial.threaded import LineReader, ReaderThread
 
 from settings import S
 
-class PrintLines(LineReader):
+class ArduinoControl(LineReader):
     
     debug = True
     _data_received = str()
@@ -18,7 +18,7 @@ class PrintLines(LineReader):
         return self._data_received
     
     def connection_made(self, transport):
-        super(PrintLines, self).connection_made(transport)
+        super(ArduinoControl, self).connection_made(transport)
         while not self.transport.serial.in_waiting:
             time.sleep(1)
             self.print("Waiting...")
@@ -48,14 +48,15 @@ class PrintLines(LineReader):
 class ArduinoThread(ReaderThread):
     def __init__(self, port: str) -> None:
         ser = serial.Serial(port, baudrate=9600, timeout=1)
-        super().__init__(ser, PrintLines)
+        super().__init__(ser, ArduinoControl)
     
     # type hint
-    def __enter__(self) -> PrintLines:
+    def __enter__(self) -> ArduinoControl:
         return super().__enter__()
 
 if __name__ == '__main__':
     with ArduinoThread(S.ARDUINO_PATH) as arduino:
+        arduino: ArduinoControl
         while True:
             arduino.write_line("hello")
             time.sleep(1)

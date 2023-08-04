@@ -1,11 +1,12 @@
 import time
+from time import sleep
 from datetime import datetime
 from typing import List
 from pydantic import BaseModel
 
 from settings import S
 
-from src.arduino.arduino import ArduinoThread
+from src.arduino.arduino import ArduinoThread, ArduinoControl
 
 class Message(BaseModel):
     timestamp: str
@@ -14,10 +15,18 @@ class Message(BaseModel):
     sensors: List[int] = list()
     leds: List[int] = list()
 
+
+THRESHOLD = 0.2
+SLEEP_SEC = 0.5
+DEBUG = True
+DEBUG = False
+
+def weight(sensor: int) -> float:
+    return sensor/1024
+
 def main():
-    DEBUG = True
-    DEBUG = False
     with ArduinoThread(port=S.ARDUINO_PATH) as arduino:
+        arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
 
         def get_respond():
@@ -25,16 +34,41 @@ def main():
             respond.timestamp = datetime.now().isoformat()
             return respond
         
+        def command(command, **kwarg):
+            msg = Message(command=command, sender="server", timestamp=datetime.now().isoformat(), **kwarg)
+            print(f"{msg!r}")
+            arduino.write_line(msg.model_dump_json())
+
         arduino.write_line("Hello world")
         while True:
-            read_sensors = Message(command="read_sensors", sender="server", timestamp=datetime.now().isoformat())
-            print(f"{read_sensors!r}")
-            arduino.write_line(read_sensors.model_dump_json())
+            command("read_sensors")
             
-            time.sleep(1)
+            sleep(SLEEP_SEC)
 
-            respond = get_respond()
-            print(f"{respond!r}")
+            read_sensors_respond = get_respond()
+            print(f"{read_sensors_respond!r}")
+            print()
+            
+            sleep(SLEEP_SEC)
+            
+            
+            
+            
+            leds = list()
+            for sensor in read_sensors_respond.sensors:
+                leds.append(int(weight(sensor) > THRESHOLD))
+            
+            command("write_leds", leds=leds)
+            
+            sleep(SLEEP_SEC)
+
+            write_leds_respond = get_respond()
+            print(f"{write_leds_respond!r}")
+            print()
+            sleep(SLEEP_SEC)
+            
+            
+
 
 
 if __name__ == "__main__":
