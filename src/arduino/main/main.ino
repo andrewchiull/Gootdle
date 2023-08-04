@@ -46,22 +46,24 @@ void loop() {
 
     deserializeJson(doc, data);
 
-    String command = doc["command"];
-    String timestamp = doc["timestamp"];
+
+    auto sender = doc["sender"];
+    auto command = doc["command"];
 
     if (command == "read_sensors") {
         // read and send data to RPi
         Serial.println("Read sensors");
 
-        JsonArray sensors = doc.createNestedArray("sensors");
-        sensors.add(analogRead(LED_0));
+        auto sensors = doc["sensors"];
+        sensors[0] = analogRead(LED_0);
         for (int i = 0; i < SLOTS_SIZE; i++) {
-            sensors.add(analogRead(LED_1 + i));
+            sensors[1+i] = analogRead(LED_1 + i);
         }
 
-        serializeJson(doc, Serial);
-        Serial.println();
     }
 
+    sender = "arduino";
+    serializeJson(doc, Serial);
+    Serial.println();
     delay(DELAY_TIME);
 }
