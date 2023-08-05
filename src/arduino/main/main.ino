@@ -5,7 +5,7 @@
 #define LED_0 13 // Build-in LED
 
 #define SLOTS_SIZE 5
-#define FORCE_SENSOR_1 A0
+#define FORCE_SENSOR_1 A1
 #define LED_1 8
 
 float DELAY_TIME = 100;
