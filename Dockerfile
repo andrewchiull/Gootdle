@@ -1,4 +1,5 @@
-FROM francoisgervais/opencv-python
+# FROM francoisgervais/opencv-python
+FROM dockerkawa0620/mediapipe
 
 
 # set the working directory
@@ -13,6 +14,9 @@ RUN apt-get update ; apt-get install -y libatomic1
 # install dependencies
 COPY ./requirements.txt ./
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
+# RUN pip install --no-cache-dir --upgrade -r matplotlib_dep.txt
+# RUN pip install matplotlib --
+# RUN pip install mediapipe-rpi3
 
 # [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder)
 COPY setup.py ./

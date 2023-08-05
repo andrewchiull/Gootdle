@@ -10,11 +10,12 @@ from src.cv.mp.pose import PoseDetection
 
 from settings import S
 
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
+DEBUG = S.DEBUG
+
 mp_pose = mp.solutions.pose
-
-
+if DEBUG:
+  mp_drawing = mp.solutions.drawing_utils
+  mp_drawing_styles = mp.solutions.drawing_styles
 
 # For webcam input:
 cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
@@ -26,7 +27,7 @@ while cap.grabbed:
   image = cap.read()
 
   # image = cv2.resize(image, None, fx=0.2, fy=0.2) # Reduce the size
-  image = imutils.resize(image, width=400)
+  # image = imutils.resize(image, width=800)
 
   # To improve performance, optionally mark the image as not writeable to
   # pass by reference.
@@ -35,6 +36,8 @@ while cap.grabbed:
   
   pose.read_image(image)
   results = pose.process()
+
+  if not DEBUG: continue
 
   # Draw the pose annotation on the image.
   image.flags.writeable = True

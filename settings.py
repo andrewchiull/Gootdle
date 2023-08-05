@@ -5,11 +5,12 @@ import platform
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
+# [Settings Management - Pydantic](https://docs.pydantic.dev/latest/usage/pydantic_settings/)
 class Settings(BaseSettings):
     model_config = ConfigDict(frozen=True)
     # [Config - Pydantic](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.frozen)
 
+    DEBUG: bool = False
     ROOT: Path = Path(__file__).parent # Root of the project
     OS: str = platform.system()
     ARDUINO_PATH: str = ("/dev/ttyACM0" if OS == "Linux" # docker or RPi
