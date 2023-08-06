@@ -7,8 +7,9 @@
 #define SLOTS_SIZE 5
 #define FORCE_SENSOR_1 A1
 #define LED_1 8
+#define DOC_SIZE 1024
 
-float DELAY_TIME = 100;
+float DELAY_TIME = 10;
 
 void setup() {
     // put your setup code here, to run once:
@@ -24,13 +25,13 @@ void setup() {
         pinMode(FORCE_SENSOR_1+i, INPUT);
     }
     
-    while (true) {
-        if (Serial.available() == 0) continue;
-        String data = Serial.readStringUntil('\n');
-        Serial.print("Arduino received: ");
-        Serial.println(data);
-        break;
-    }
+    // while (true) {
+    //     if (Serial.available() == 0) continue;
+    //     String data = Serial.readStringUntil('\n');
+    //     Serial.print("Arduino received: ");
+    //     Serial.println(data);
+    //     break;
+    // }
 
 
 }
@@ -42,8 +43,7 @@ void loop() {
     String data = Serial.readStringUntil('\n');
     Serial.print("Arduino received: ");
     Serial.println(data);
-
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(DOC_SIZE);
     deserializeJson(doc, data);
 
     String command = doc["command"];
