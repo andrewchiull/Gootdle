@@ -1,4 +1,4 @@
-id,photo,location,color,season,type,memo
-1391824,"./IMG123.jpg",12,red,summer,top,"null"
-6591824,"./IMG456.jpg",2,blue,spring,bottom,"null"
-7791824,"./IMG903.jpg",35,white,summer,top,"null"
+1391824,"static/red.jpg",12,red,summer,top,"null"
+6591824,"static/blue.jpg",2,blue,spring,bottom,"null"
+7791824,"static/white.jpg",35,white,summer,bottom,"null"
+4563322,"static/black.jpg",35,black,summer,top,"null"

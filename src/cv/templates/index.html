@@ -1,67 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>智能衣櫃</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script type="text/javascript">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function() {
-            console.log('WebSocket 連接成功');
-        });
-    
-        // 接收 WebSocket 事件，並更新頁面內容
-        socket.on('new_color', function(color) {
-            var li = document.createElement('li');
-            li.innerHTML = "ID: " + color.id + ", Color Name: " + color.color_name;
-            document.getElementById('colorList').appendChild(li);
-        });
+      var socket = io.connect(
+        "http://" + document.domain + ":" + location.port
+      );
+      socket.on("connect", function () {
+        console.log("WebSocket 連接成功");
+      });
+      // 暫不會用到
+      // 接收 WebSocket 事件，並更新頁面內容
+      socket.on("new_color", function (color) {
+        var li = document.createElement("li");
+        li.innerHTML = "ID: " + color.id + ", Color Name: " + color.color_name;
+        document.getElementById("colorList").appendChild(li);
+      });
 
-        // 接收查询结果，并更新页面颜色列表
-        socket.on('query_result', function(data) {
-            var colorList = document.getElementById('colorList');
-            colorList.innerHTML = ''; // 清空列表
-            data.forEach(function(color) {
-                var li = document.createElement('li');
-                li.innerHTML = "ID: " + color.id + ", Color Name: " + color.color_name;
-                colorList.appendChild(li);
-            });
+      // 接收查询结果，并更新页面颜色列表
+      socket.on("query_result", function (data) {
+        var colorList = document.getElementById("colorList");
+        colorList.innerHTML = ""; // 清空列表
+        data.forEach(function (color) {
+          var li = document.createElement("li");
+          li.innerHTML =
+            "ID: " + color.id + ", Color Name: " + color.color_name;
+          colorList.appendChild(li);
         });
-    
-        function queryColorsByColorName() {
-            var colorName = prompt("请输入要查询的颜色名称:");
-            socket.emit('query_colors_by_color_name', colorName);
-        }
+      });
 
-        function deleteColor(colorName) {
+      function queryColorsByColorName() {
+        var colorName = prompt("请输入要查询的颜色名称:");
+        socket.emit("query_colors_by_color_name", colorName);
+      }
+
+      function deleteColor(colorName) {
         var confirmation = confirm("确定要删除颜色: " + colorName + " ?");
-            if (confirmation) {
-                socket.emit('delete_color', colorName);
-            }
+        if (confirmation) {
+          socket.emit("delete_color", colorName);
         }
-        
-        // 接收颜色删除事件，并更新页面颜色列表
-        socket.on('color_deleted', function(colorName) {
-            var colorList = document.getElementById('colorList');
-            var colorItems = colorList.getElementsByTagName('li');
-            for (var i = 0; i < colorItems.length; i++) {
-                var colorItem = colorItems[i];
-                if (colorItem.innerHTML.includes("Color Name: " + colorName)) {
-                    colorItem.remove();
-                    break;
-                }
-            }
-        });
+      }
 
+      // 接收颜色删除事件，并更新页面颜色列表
+      socket.on("color_deleted", function (colorName) {
+        var colorList = document.getElementById("colorList");
+        var colorItems = colorList.getElementsByTagName("li");
+        for (var i = 0; i < colorItems.length; i++) {
+          var colorItem = colorItems[i];
+          if (colorItem.innerHTML.includes("Color Name: " + colorName)) {
+            colorItem.remove();
+            break;
+          }
+        }
+      });
+      // 暫不會用到
+      // 此處省略其他代碼
+socket.on('clothing_data2', function(data) {
+    var topClothingData = data.filter(clothing2 => clothing2.clothing_type === 'top');
+    var bottomClothingData = data.filter(clothing2 => clothing2.clothing_type === 'bottom');
 
-        socket.on('clothing_data', function(data) {
-            var currentIndex = 0;
-            isLoading = false; 
-            
-            function updateClothingInfo(index) {
-                var clothing = data[index];
-                var clothingInfo = document.getElementById('clothingInfo');
+    var currentTopIndex = 0;
+    var currentBottomIndex = 0;
 
-                clothingInfo.innerHTML = `
+    function updateTopClothingInfo(index) {
+        var clothing = topClothingData[index];
+        var clothingInfo = document.getElementById('topClothingInfo');
+
+        clothingInfo.innerHTML = `
                     <p>ID: ${clothing.id}</p>
                     <p>Color: ${clothing.colo_namer}</p>
                     <img id="clothingPhoto" src="${clothing.photo_path}" alt="Clothing Photo">
@@ -70,58 +76,118 @@
                     <p>Clothing Type: ${clothing.clothing_type}</p>
                 `;
 
-                var clothingInfo = document.getElementById('clothingInfo');
-                console.log("clothingInfo")
-                console.log(clothingInfo)
-            }
+          var clothingInfo = document.getElementById("clothingInfo");
+    }
 
-            updateClothingInfo(currentIndex);
+    function updateBottomClothingInfo(index) {
+        var clothing = bottomClothingData[index];
+        var clothingInfo = document.getElementById('bottomClothingInfo');
 
-            function switchClothing(offset) {
-                console.log("currentIndex")
-                console.log(currentIndex)
+        clothingInfo.innerHTML = `
+                    <p>ID: ${clothing.id}</p>
+                    <p>Color: ${clothing.colo_namer}</p>
+                    <img id="clothingPhoto" src="${clothing.photo_path}" alt="Clothing Photo">
+                    <p>Slot Location: ${clothing.slot_location}</p>
+                    <p>Season: ${clothing.season}</p>
+                    <p>Clothing Type: ${clothing.clothing_type}</p>
+                `;
 
-                console.log("offset")
-                console.log(offset)
+          var clothingInfo = document.getElementById("clothingInfo");
+    }
 
-                currentIndex += offset;
-                currentIndex = currentIndex % data.length;
-                console.log("currentIndex");
-                console.log(currentIndex);
-                updateClothingInfo(currentIndex);
-            }
+    // 初始化顯示第一件上衣和第一件下身的信息
+    updateTopClothingInfo(currentTopIndex);
+    updateBottomClothingInfo(currentBottomIndex);
 
-            document.getElementById('prev').addEventListener('click', function() {
-                console.log("prev clicked");
-                switchClothing(-1);
-                loadNextClothing(); // Load the next clothing data
-            });
+    // 監聽上衣和下身切換的按鈕事件
+    document.getElementById('prevTop').addEventListener('click', function() {
+        currentTopIndex = (currentTopIndex - 1 + topClothingData.length) % topClothingData.length;
+        updateTopClothingInfo(currentTopIndex);
+    });
 
-            document.getElementById('next').addEventListener('click', function() {
-                console.log("next clicked");
-                switchClothing(1);
-                loadNextClothing(); // Load the next clothing data
+    document.getElementById('nextTop').addEventListener('click', function() {
+        currentTopIndex = (currentTopIndex + 1) % topClothingData.length;
+        updateTopClothingInfo(currentTopIndex);
+    });
 
-            });
-            // 
-        });
+    document.getElementById('prevBottom').addEventListener('click', function() {
+        currentBottomIndex = (currentBottomIndex - 1 + bottomClothingData.length) % bottomClothingData.length;
+        updateBottomClothingInfo(currentBottomIndex);
+    });
 
-        function queryClothing() {
-            socket.emit('query_clothing');
-        }
+    document.getElementById('nextBottom').addEventListener('click', function() {
+        currentBottomIndex = (currentBottomIndex + 1) % bottomClothingData.length;
+        updateBottomClothingInfo(currentBottomIndex);
+    });
+});
 
-        socket.on('connect', function() {
-            console.log('WebSocket 連接成功');
-            queryClothing();
-        });
 
-        // loadNextClothing();
+    //   socket.on("clothing_data2", function (data) {
+    //     var currentIndex = 0;
+    //     isLoading = false;
 
-      
+    //     function updateClothingInfo(index) {
+    //       var clothing = data[index];
+    //       var clothingInfo = document.getElementById("clothingInfo");
+
+    //       clothingInfo.innerHTML = `
+    //                 <p>ID: ${clothing.id}</p>
+    //                 <p>Color: ${clothing.colo_namer}</p>
+    //                 <img id="clothingPhoto" src="${clothing.photo_path}" alt="Clothing Photo">
+    //                 <p>Slot Location: ${clothing.slot_location}</p>
+    //                 <p>Season: ${clothing.season}</p>
+    //                 <p>Clothing Type: ${clothing.clothing_type}</p>
+    //             `;
+
+    //       var clothingInfo = document.getElementById("clothingInfo");
+    //       console.log("clothingInfo");
+    //       console.log(clothingInfo);
+    //     }
+
+    //     updateClothingInfo(currentIndex);
+
+    //     function switchClothing(offset) {
+    //       // console.log("currentIndex")
+    //       // console.log(currentIndex)
+
+    //       // console.log("offset")
+    //       // console.log(offset)
+
+    //       currentIndex += offset;
+    //       currentIndex = currentIndex % data.length;
+    //       console.log("currentIndex");
+    //       console.log(currentIndex);
+    //       updateClothingInfo(currentIndex);
+    //     }
+
+    //     document.getElementById("prev").addEventListener("click", function () {
+    //       console.log("prev clicked");
+    //       switchClothing(-1);
+    //       loadNextClothing(); // Load the next clothing data
+    //     });
+
+    //     document.getElementById("next").addEventListener("click", function () {
+    //       console.log("next clicked");
+    //       switchClothing(1);
+    //       loadNextClothing(); // Load the next clothing data
+    //     });
+    //     //
+    //   });
+
+      function queryClothing() {
+        socket.emit("query_clothing");
+      }
+
+      socket.on("connect", function () {
+        console.log("WebSocket 連接成功");
+        queryClothing();
+      });
+
+      // loadNextClothing();
     </script>
-</head>
-<body>
-    <h1>智能衣櫃</h1>
+  </head>
+  <body>
+    <!-- <h1>智能衣櫃</h1>
     <ul id="colorList">
         {% for color in colors %}
         <li>
@@ -129,11 +195,21 @@
             <button onclick="deleteColor('{{ color.color_name }}')">删除</button>
         </li>
         {% endfor %}
-    </ul>
-    <div id="clothingInfo"></div>
-    <button id="prev">上一件</button>
-    <button id="next">下一件</button>
-    
-</body>
+    </ul> -->
 
+    <div>
+      <h2>上衣</h2>
+      <div id="topClothingInfo"></div>
+      <button id="prevTop">上一件</button>
+      <button id="nextTop">下一件</button>
+    </div>
+
+    <div>
+      <h2>下身</h2>
+      <div id="bottomClothingInfo"></div>
+      <button id="prevBottom">上一件</button>
+      <button id="nextBottom">下一件</button>
+    </div>
+    
+  </body>
 </html>
