@@ -17,7 +17,8 @@
 # [Structuring Your Project — The Hitchhiker's Guide to Python](https://docs.python-guide.org/writing/structure/)
 ```
 
-# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder)
+
+# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder/50194143#50194143)
 
 ```python
 # setup.py
@@ -144,8 +145,14 @@ docker run hello-world
 
 
 ## opencv-python Installation
+[Run AMD64 Docker Images On An ARM Computer | Enlear Academy](https://enlear.academy/run-amd64-docker-images-on-an-arm-computer-208929004510)
+
 
 [francoisgervais/opencv-python - Docker Image | Docker Hub](https://hub.docker.com/r/francoisgervais/opencv-python/)
+
+## Get IP
+
+[如何取得 Container 所使用的 Ip - Yowko's Notes](https://blog.yowko.com/container-ip/)
 
 ## Build and Run
 
@@ -163,3 +170,9 @@ docker ps
 docker exec -it python-server sh -c "echo Hi"
 docker exec -it python-server sh -c "python3 test_docker_volume.py"
 ```
+
+# Mediapipe
+
+## Installation
+
+[Raspberry Pi 安裝 Google Mediapipe，3分鐘完成！ - CAVEDU教育團隊技術部落格](https://blog.cavedu.com/2021/11/16/raspberrypi-google-mediapipe/)

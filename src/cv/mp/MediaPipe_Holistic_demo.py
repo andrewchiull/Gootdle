@@ -1,72 +1,87 @@
-import var
-
 # [mediapipe/docs/solutions/holistic.md at master · google/mediapipe](https://github.com/google/mediapipe/blob/master/docs/solutions/holistic.md)
 
+
+import numpy as np
 import cv2
 import mediapipe as mp
+
+import imutils
+from imutils.video import WebcamVideoStream
+from imutils.video import FPS
+
+from settings import S
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_holistic = mp.solutions.holistic
 
-# For static images:
-IMAGE_FILES = []
-BG_COLOR = (192, 192, 192) # gray
-with mp_holistic.Holistic(
-    static_image_mode=True,
-    model_complexity=2,
-    enable_segmentation=True,
-    refine_face_landmarks=True) as holistic:
-  for idx, file in enumerate(IMAGE_FILES):
-    image = cv2.imread(file)
-    image_height, image_width, _ = image.shape
-    # Convert the BGR image to RGB before processing.
-    results = holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
-    if results.pose_landmarks:
-      print(
-          f'Nose coordinates: ('
-          f'{results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].x * image_width}, '
-          f'{results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].y * image_height})'
-      )
+# # For static images:
+# IMAGE_FILES = []
+# BG_COLOR = (192, 192, 192) # gray
+# with mp_holistic.Holistic(
+#     static_image_mode=True,
+#     model_complexity=2,
+#     enable_segmentation=True,
+#     refine_face_landmarks=True) as holistic:
+#   for idx, file in enumerate(IMAGE_FILES):
+#     image = cv2.imread(file)
+#     image_height, image_width, _ = image.shape
+#     # Convert the BGR image to RGB before processing.
+#     results = holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
-    annotated_image = image.copy()
-    # Draw segmentation on the image.
-    # To improve segmentation around boundaries, consider applying a joint
-    # bilateral filter to "results.segmentation_mask" with "image".
-    condition = np.stack((results.segmentation_mask,) * 3, axis=-1) > 0.1
-    bg_image = np.zeros(image.shape, dtype=np.uint8)
-    bg_image[:] = BG_COLOR
-    annotated_image = np.where(condition, annotated_image, bg_image)
-    # Draw pose, left and right hands, and face landmarks on the image.
-    mp_drawing.draw_landmarks(
-        annotated_image,
-        results.face_landmarks,
-        mp_holistic.FACEMESH_TESSELATION,
-        landmark_drawing_spec=None,
-        connection_drawing_spec=mp_drawing_styles
-        .get_default_face_mesh_tesselation_style())
-    mp_drawing.draw_landmarks(
-        annotated_image,
-        results.pose_landmarks,
-        mp_holistic.POSE_CONNECTIONS,
-        landmark_drawing_spec=mp_drawing_styles.
-        get_default_pose_landmarks_style())
-    cv2.imwrite('/tmp/annotated_image' + str(idx) + '.png', annotated_image)
-    # Plot pose world landmarks.
-    mp_drawing.plot_landmarks(
-        results.pose_world_landmarks, mp_holistic.POSE_CONNECTIONS)
+#     if results.pose_landmarks:
+#       print(
+#           f'Nose coordinates: ('
+#           f'{results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].x * image_width}, '
+#           f'{results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].y * image_height})'
+#       )
+
+#     annotated_image = image.copy()
+#     # Draw segmentation on the image.
+#     # To improve segmentation around boundaries, consider applying a joint
+#     # bilateral filter to "results.segmentation_mask" with "image".
+#     condition = np.stack((results.segmentation_mask,) * 3, axis=-1) > 0.1
+#     bg_image = np.zeros(image.shape, dtype=np.uint8)
+#     bg_image[:] = BG_COLOR
+#     annotated_image = np.where(condition, annotated_image, bg_image)
+#     # Draw pose, left and right hands, and face landmarks on the image.
+#     mp_drawing.draw_landmarks(
+#         annotated_image,
+#         results.face_landmarks,
+#         mp_holistic.FACEMESH_TESSELATION,
+#         landmark_drawing_spec=None,
+#         connection_drawing_spec=mp_drawing_styles
+#         .get_default_face_mesh_tesselation_style())
+#     mp_drawing.draw_landmarks(
+#         annotated_image,
+#         results.pose_landmarks,
+#         mp_holistic.POSE_CONNECTIONS,
+#         landmark_drawing_spec=mp_drawing_styles.
+#         get_default_pose_landmarks_style())
+#     cv2.imwrite('/tmp/annotated_image' + str(idx) + '.png', annotated_image)
+#     # Plot pose world landmarks.
+#     mp_drawing.plot_landmarks(
+#         results.pose_world_landmarks, mp_holistic.POSE_CONNECTIONS)
+
 
 # For webcam input:
-cap = cv2.VideoCapture(var.VIDEO_PATH)
+# cap = cv2.VideoCapture(S.VIDEO_SOURCE)
+cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
+# cap = cv2.VideoCapture(0)
+# cap = WebcamVideoStream(src=0).start()
+fps = FPS().start()
 with mp_holistic.Holistic(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as holistic:
-  while cap.isOpened():
-    success, image = cap.read()
-    if not success:
-      print("Ignoring empty camera frame.")
-      # If loading a video, use 'break' instead of 'continue'.
-      continue
+
+  while cap.grabbed:
+    fps.update()
+
+    image = cap.read()
+    
+    # image = cv2.resize(image, None, fx=0.2, fy=0.2) # Reduce the size
+    image = imutils.resize(image, width=400)
 
     # To improve performance, optionally mark the image as not writeable to
     # pass by reference.
@@ -90,8 +105,21 @@ with mp_holistic.Holistic(
         mp_holistic.POSE_CONNECTIONS,
         landmark_drawing_spec=mp_drawing_styles
         .get_default_pose_landmarks_style())
+
     # Flip the image horizontally for a selfie-view display.
-    cv2.imshow('MediaPipe Holistic', cv2.flip(image, 1))
+    cv2.imshow('MediaPipe Holistic',
+               image
+              #  cv2.flip(image, 1) # DONT Flip
+               )
+
     if cv2.waitKey(5) & 0xFF == 27:
       break
-cap.release()
+
+# stop the timer and display FPS information
+fps.stop()
+print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
+print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+
+# do a bit of cleanup
+cv2.destroyAllWindows()
+cap.stop()

@@ -1,5 +1,5 @@
 import cv2
-import color
+from src.cv import color
 
 class Camera:
     def run(self, source=0):

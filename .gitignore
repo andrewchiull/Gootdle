@@ -7,6 +7,8 @@
 # Video files
 *.mov
 
+# SECRETS
+secrets/
 
 
 # The followings are recommended by GitHub
