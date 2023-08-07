@@ -10,8 +10,8 @@ from src.arduino.arduino import ArduinoThread, ArduinoControl
 
 THRESHOLD = 2000
 SLEEP_SEC = 0.2
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 USING_0th = False
 
@@ -60,6 +60,9 @@ def main():
 
             # Ignore echos
             if raw_respond.startswith("[[ECHO]]"):
+                return None
+            # Ignore DEBUG
+            if raw_respond.startswith("[["):
                 return None
 
             try:

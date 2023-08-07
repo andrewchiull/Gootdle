@@ -92,7 +92,7 @@ void loop() {
 
     String command = doc["command"];
     auto sensors = doc["sensors"];
-    // auto leds = doc["leds"];
+    auto leds = doc["leds"];
 
     // TODO use Status design pattern
     if (command == "read_sensors") {
@@ -101,7 +101,18 @@ void loop() {
         }
     }
     else if (command == "write_leds") {
-        // pass
+
+        // int leds_test[] = {0,0,1,1,0,0};
+        // Write LED
+        // Serial.print("[[DEBUG]]");
+        for (int i = 0; i <= SLOTS_SIZE; i++) {
+
+            // Serial.print(leds_test[i]);
+            // write_led_strand(i, leds_test[i]);
+            Serial.print(int(leds[i]));
+            write_led_strand(i, int(leds[i]));
+        }
+        Serial.println();
     }
 
     // Respond
@@ -111,11 +122,9 @@ void loop() {
         Serial.println();
     }
 
-    // // Write LED
-    // for (int i = 0; i <= SLOTS_SIZE; i++) {
-    //     write_led_strand(i, leds[i]);
-    // }
 
 
+
+    // doc.clear();
     delay(DELAY_TIME);
 }
