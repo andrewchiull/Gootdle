@@ -16,7 +16,7 @@ float DELAY_TIME = 10;
 String data;
 
 void read_line() {
-    Serial.print("Arduino received: ");
+    Serial.print("[[ECHO]]");
     data = Serial.readStringUntil('\n');
     Serial.println(data);
 }
@@ -78,7 +78,7 @@ void setup() {
 void loop() {
     // Run if received command
     if (Serial.available() == 0) {
-        Serial.println("Arduino received: (Nothing)");
+        // Serial.println("ARDUINO_IS_IDLE");
     } else {
         read_line();
     }
@@ -107,7 +107,7 @@ void loop() {
     }
 
 
-    // // Respond
+    // // Respond // TODO when?
     // doc["sender"] = "arduino";
     // serializeJson(doc, Serial);
     // Serial.println();

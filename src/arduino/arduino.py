@@ -7,6 +7,7 @@ import serial
 from serial.threaded import LineReader, ReaderThread
 
 from settings import S
+SLEEP_TIME = 1
 
 class ArduinoControl(LineReader):
     
@@ -19,22 +20,24 @@ class ArduinoControl(LineReader):
     def connection_made(self, transport):
         super(ArduinoControl, self).connection_made(transport)
         while not self.transport.serial.in_waiting:
-            time.sleep(1)
+            time.sleep(SLEEP_TIME)
             self.print("Waiting port to be opened...")
 
         self.print(f'Port {self.transport.serial.port} is opened\n')
 
     def print(self, message: str):
+        # TODO add logging
+        # TODO add color # import colorama
         if self.debug:
-            print(f">>> {message}")
+            print(f"[INFO] {message}")
 
     def write_line(self, text: str) -> None:
-        self.print(f"[Sent] {text}")
+        self.print(f">>> {text !r}")
         return super().write_line(text)
 
     def handle_line(self, data: str):
         self._data_received = data.rstrip() # Remove '\r' or '\n'
-        self.print(f'[Received] {self._data_received!r}')
+        self.print(f'<<< {self._data_received !r}')
 
     def connection_lost(self, exc: Exception) -> None:
         self.print('Serial port is closed')
