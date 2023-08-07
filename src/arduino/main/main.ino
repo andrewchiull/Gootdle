@@ -2,13 +2,11 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 
-#define FORCE_SENSOR_0 A0 // Empty sensor for testing
+#define FORCE_SENSOR_0 A0
 #define LED_0 13 // Build-in LED for testing
 
 #define SLOTS_SIZE 5
 #define LED_STRAND_PIN 6
-#define FORCE_SENSOR_1 A1
-#define LED_1 8
 #define DOC_SIZE 1024
 
 float DELAY_TIME = 10;
@@ -66,9 +64,8 @@ void setup() {
     pinMode(LED_0, OUTPUT);
     pinMode(FORCE_SENSOR_0, INPUT);
 
-    for (int i = 0; i < SLOTS_SIZE; i++) {
-        // pinMode(LED_1+i, OUTPUT);
-        pinMode(FORCE_SENSOR_1+i, INPUT);
+    for (int i = 0; i <= SLOTS_SIZE; i++) {
+        pinMode(FORCE_SENSOR_0+i, INPUT);
     }
 
     setup_led_strand(LED_STRAND_PIN, SLOTS_SIZE);
@@ -76,11 +73,17 @@ void setup() {
 }
 
 void loop() {
+    bool received = (Serial.available() > 0);
     // Run if received command
-    if (Serial.available() == 0) {
-        // Serial.println("ARDUINO_IS_IDLE");
-    } else {
+    if (received) {
         read_line();
+
+        // // test
+        // DynamicJsonDocument doc(DOC_SIZE);
+        // deserializeJson(doc, data);
+        // doc["sender"] = "test";
+        // serializeJson(doc, Serial);
+        // Serial.println();
     }
 
     // Parse data string to json
@@ -89,27 +92,30 @@ void loop() {
 
     String command = doc["command"];
     auto sensors = doc["sensors"];
-    auto leds = doc["leds"];
+    // auto leds = doc["leds"];
 
     // TODO use Status design pattern
     if (command == "read_sensors") {
-        for (int i = 0; i < SLOTS_SIZE; i++) {
-            sensors[1+i] = analogRead(FORCE_SENSOR_1 + i);
+        for (int i = 0; i <= SLOTS_SIZE; i++) {
+            sensors[i] = analogRead(FORCE_SENSOR_0 + i);
         }
     }
-    // } else if (command == "write_leds") {
-    //     // pass
-    // }
-
-    // Write LED
-    for (int i = 1; i <= SLOTS_SIZE; i++) {
-        write_led_strand(i, leds[i]);
+    else if (command == "write_leds") {
+        // pass
     }
 
+    // Respond
+    if (received) {
+        doc["sender"] = "arduino";
+        serializeJson(doc, Serial);
+        Serial.println();
+    }
 
-    // // Respond // TODO when?
-    // doc["sender"] = "arduino";
-    // serializeJson(doc, Serial);
-    // Serial.println();
-    // delay(DELAY_TIME);
+    // // Write LED
+    // for (int i = 0; i <= SLOTS_SIZE; i++) {
+    //     write_led_strand(i, leds[i]);
+    // }
+
+
+    delay(DELAY_TIME);
 }

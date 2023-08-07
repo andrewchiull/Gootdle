@@ -63,7 +63,7 @@ class ArduinoControl():
         self.print('Serial port is closed')
         try:
             self.transport = None
-        except Exception:
+        except Exception :
             traceback.print_exception()
 
 class ArduinoThread(ReaderThread):
