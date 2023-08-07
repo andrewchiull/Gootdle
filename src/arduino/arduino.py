@@ -4,14 +4,22 @@ import sys
 import time
 import traceback
 import serial
-from serial.threaded import LineReader, ReaderThread
+from serial.threaded import Packetizer, ReaderThread
 
 from settings import S
 SLEEP_TIME = 1
 
-class ArduinoControl(LineReader):
+
+class ArduinoControl(Packetizer):
     
     debug = True
+
+
+    TERMINATOR = b'\n'
+    ENCODING = 'utf-8'
+    UNICODE_HANDLING = 'replace'
+
+
     _data_received = str()
 
     def read(self) -> str:
@@ -31,9 +39,13 @@ class ArduinoControl(LineReader):
         if self.debug:
             print(f"[INFO] {message}")
 
+    def handle_packet(self, packet):
+        self.handle_line(packet.decode(self.ENCODING, self.UNICODE_HANDLING))
+
     def write_line(self, text: str) -> None:
+        self.transport.write(f"{text}\n".encode(self.ENCODING, self.UNICODE_HANDLING))
+        
         self.print(f">>> {text !r}")
-        return super().write_line(text)
 
     def handle_line(self, data: str):
         self._data_received = data.rstrip() # Remove '\r' or '\n'
