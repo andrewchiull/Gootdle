@@ -32,11 +32,8 @@ def main():
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
 
-
-        arduino.transport.serial.dtr = False
         # FLUSH ANYTHING
         arduino.transport.serial.flush()
-        arduino.transport.serial.dtr = True
         arduino.buffer = bytearray()
 
         try:
