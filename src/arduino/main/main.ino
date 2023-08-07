@@ -88,7 +88,6 @@ void loop() {
     deserializeJson(doc, data);
 
     String command = doc["command"];
-    Serial.println(command);
     auto sensors = doc["sensors"];
     auto leds = doc["leds"];
 
@@ -108,9 +107,9 @@ void loop() {
     }
 
 
-    // Respond
-    doc["sender"] = "arduino";
-    serializeJson(doc, Serial);
-    Serial.println();
-    delay(DELAY_TIME);
+    // // Respond
+    // doc["sender"] = "arduino";
+    // serializeJson(doc, Serial);
+    // Serial.println();
+    // delay(DELAY_TIME);
 }

@@ -14,7 +14,6 @@ class ArduinoControl(LineReader):
     _data_received = str()
 
     def read(self) -> str:
-        self.print(self._data_received)
         return self._data_received
     
     def connection_made(self, transport):

@@ -19,7 +19,6 @@ class Message(BaseModel):
 THRESHOLD = 0.2
 SLEEP_SEC = 0.5
 DEBUG = True
-DEBUG = False
 
 V_in = 1024
 R_f = 10E+3
@@ -82,6 +81,8 @@ def main():
         # arduino.write_line("Hello world")
         while True:
 
+            sleep(SLEEP_SEC)
+            continue
             command("read_sensors")
             
 
