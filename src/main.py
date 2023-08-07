@@ -32,13 +32,37 @@ def main():
     with ArduinoThread(port=S.ARDUINO_PATH) as arduino:
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
-        CONNECTION_MADE = arduino.read()
-        print(f"{CONNECTION_MADE = }")
-        # if CONNECTION_MADE != "CONNECTION_MADE":
-        #     print(f"[ERROR] {CONNECTION_MADE = }")
-            # return
 
-        sleep(1)
+
+        # FLUSH ANYTHING
+        arduino.transport.serial.flush()
+        arduino.buffer = bytearray()
+        arduino._data_received = "INITIAL_STATE"
+
+        try:
+            # [Step 1] Arduino responds that ARDUINO_IS_READY
+            # [Step 2] Server waits until ARDUINO_IS_READY
+            while True:
+                CONNECTION_MADE = arduino.read()
+                print(f"{CONNECTION_MADE = }")
+                
+                if CONNECTION_MADE == "INITIAL_STATE":
+                    print("Waiting for ARDUINO_IS_READY...")
+                    sleep(1)
+                else:
+                    break
+
+            # [Step 3] Server responds that SERVER_IS_READY
+            if CONNECTION_MADE == "ARDUINO_IS_READY":
+                arduino.write_line("SERVER_IS_READY")
+            else:
+                raise ConnectionError(f"[ERROR] {CONNECTION_MADE = }")
+
+        except ConnectionError as e:
+            print(e)
+        
+        # [Step 4] Arduino waits until server is ready
+        # [Step 5] Server starts to send messages
 
         def get_respond():
             raw_respond = arduino.read()
@@ -57,7 +81,7 @@ def main():
 
         # arduino.write_line("Hello world")
         while True:
-            if arduino.read() == r"{}": continue
+
             command("read_sensors")
             
 

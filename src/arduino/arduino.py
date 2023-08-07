@@ -21,9 +21,9 @@ class ArduinoControl(LineReader):
         super(ArduinoControl, self).connection_made(transport)
         while not self.transport.serial.in_waiting:
             time.sleep(1)
-            self.print("Waiting...")
+            self.print("Waiting port to be opened...")
 
-        self.print(f'Port {transport.serial.port} is opened\n')
+        self.print(f'Port {self.transport.serial.port} is opened\n')
 
     def print(self, message: str):
         if self.debug:
