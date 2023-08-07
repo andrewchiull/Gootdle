@@ -7,7 +7,9 @@
 
 #define SLOTS_SIZE 5
 #define LED_STRAND_PIN 6
-#define DOC_SIZE 1024
+
+// memory calculator [Assistant | ArduinoJson 6](https://arduinojson.org/v6/assistant/#/step1)
+#define DOC_SIZE 512 // Don't go to large or small
 
 float DELAY_TIME = 10;
 
@@ -104,7 +106,7 @@ void loop() {
 
         // int leds_test[] = {0,0,1,1,0,0};
         // Write LED
-        // Serial.print("[[DEBUG]]");
+        Serial.print("[[DEBUG]]");
         for (int i = 0; i <= SLOTS_SIZE; i++) {
 
             // Serial.print(leds_test[i]);

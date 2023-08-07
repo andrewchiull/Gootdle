@@ -58,6 +58,10 @@ def main():
             if raw_respond == "ARDUINO_IS_READY":
                 return None
 
+            # Ignore the initial state
+            if raw_respond == r"{}":
+                return None
+
             # Ignore echos
             if raw_respond.startswith("[[ECHO]]"):
                 return None
