@@ -81,40 +81,36 @@ void loop() {
     // Update data if received command
     if (received) {
         update();
-    }
 
-    // Parse data string to json
-    DynamicJsonDocument doc(DOC_SIZE);
-    deserializeJson(doc, data);
+        // Parse data string to json
+        DynamicJsonDocument doc(DOC_SIZE);
+        deserializeJson(doc, data);
 
-    String command = doc["command"];
-    auto sensors = doc["sensors"];
-    auto leds = doc["leds"];
+        String command = doc["command"];
+        auto sensors = doc["sensors"];
+        auto leds = doc["leds"];
 
-    // TODO use Status design pattern
-    if (command == "read_sensors") {
-        for (int i = 0; i <= SLOTS_SIZE; i++) {
-            sensors[i] = analogRead(FORCE_SENSOR_0 + i);
+        // TODO use Status design pattern
+        if (command == "read_sensors") {
+            for (int i = 0; i <= SLOTS_SIZE; i++) {
+                sensors[i] = analogRead(FORCE_SENSOR_0 + i);
+            }
         }
-    }
-    else if (command == "write_leds" && received) {
-        // Update only when received
-        pixels.clear(); // Reset
-        Serial.print("[[DEBUG]]write_leds:");
-        for (int i = 1; i <= SLOTS_SIZE; i++) {
-            Serial.print(int(leds[i]));
-            write_led_strand(i, int(leds[i]));
+        else if (command == "write_leds") {
+            pixels.clear(); // Reset
+            Serial.print("[[DEBUG]]write_leds:");
+            for (int i = 1; i <= SLOTS_SIZE; i++) {
+                Serial.print(int(leds[i]));
+                write_led_strand(i, int(leds[i]));
+            }
+            Serial.println();
         }
-        Serial.println();
-    }
 
-    // Respond
-    if (received) {
+        // Respond
         doc["sender"] = "arduino";
         serializeJson(doc, Serial);
         Serial.println();
     }
-
 
     delay(DELAY_TIME);
 }
