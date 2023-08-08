@@ -33,6 +33,8 @@ def main():
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
 
+        # DOING SERIAL MONITOR
+        # TODO send Ctrl+C
         # FLUSH ANYTHING
         arduino.transport.serial.flush()
         arduino.buffer = bytearray()
@@ -53,7 +55,7 @@ def main():
 
         def get_respond(command):  # TODO very ugly
             raw_respond = arduino.read()
-            
+            if DEBUG: print(f"{raw_respond = }")
             # Ignore the initial state
             if raw_respond == "ARDUINO_IS_READY":
                 return None
@@ -72,7 +74,7 @@ def main():
             try:
                 respond: Message = Message.model_validate_json(raw_respond)
                 if respond.command != command:
-                    raise Exception(f"{respond.command =}, not {command}")
+                    raise Exception(f"Expected {command = }")
             except Exception as e:
                 if DEBUG: print(f"{e !r}")
                 return None
