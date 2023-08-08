@@ -21,10 +21,7 @@ void update() {
     Serial.println(data);
 }
 
-Adafruit_NeoPixel led_strand;
-
-// Which pin on the Arduino is connected to the NeoPixels?
-                        // LED_0 is unused
+// LED_0 is unused
 Adafruit_NeoPixel pixels(SLOTS_SIZE + 1, LED_STRAND_PIN, NEO_GRB + NEO_KHZ800);
 
 
@@ -36,18 +33,18 @@ Adafruit_NeoPixel pixels(SLOTS_SIZE + 1, LED_STRAND_PIN, NEO_GRB + NEO_KHZ800);
 //   led_strand.begin();
 // }
 
-// // set the nth neopixel to a particular brightness of white
-// // meant to be used with val as HIGH or LOW
-// void write_led_strand(int num, int val) {
-//   led_strand.setPixelColor(num, led_strand.Color(val*255,val*255,val*255));
-//   led_strand.show();
-// }
+// set the nth neopixel to a particular brightness of white
+// meant to be used with val as HIGH or LOW
+void write_led_strand(int num, int val) {
+  pixels.setPixelColor(num, pixels.Color(val*255,val*255,val*255));
+  pixels.show();
+}
 
-// // set the nth neopixel to a particular rgb color
-// void write_led_strand(int num, int r, int g, int b) {
-//   led_strand.setPixelColor(num, led_strand.Color(r,g,b));
-//   led_strand.show();
-// }
+// set the nth neopixel to a particular rgb color
+void write_led_strand(int num, int r, int g, int b) {
+  pixels.setPixelColor(num, pixels.Color(r,g,b));
+  pixels.show();
+}
 
 
 void setup() {
@@ -75,7 +72,6 @@ void setup() {
         pinMode(FORCE_SENSOR_0+i, INPUT);
     }
 
-    led_strand.begin();
     pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
 }
 
@@ -85,13 +81,6 @@ void loop() {
     // Update data if received command
     if (received) {
         update();
-
-        // // test
-        // DynamicJsonDocument doc(DOC_SIZE);
-        // deserializeJson(doc, data);
-        // doc["sender"] = "test";
-        // serializeJson(doc, Serial);
-        // Serial.println();
     }
 
     // Parse data string to json
@@ -108,39 +97,15 @@ void loop() {
             sensors[i] = analogRead(FORCE_SENSOR_0 + i);
         }
     }
-    else if (command == "write_leds") {
-
-        // int leds_test[] = {0,0,1,1,0,0};
-        // Write LED
-        Serial.print("[[DEBUG]]");
+    else if (command == "write_leds" && received) {
+        // Update only when received
+        pixels.clear(); // Reset
+        Serial.print("[[DEBUG]]write_leds:");
         for (int i = 1; i <= SLOTS_SIZE; i++) {
-
-            // Serial.print(leds_test[i]);
-            // write_led_strand(i, leds_test[i]);
             Serial.print(int(leds[i]));
-            // write_led_strand(i, int(leds[i]));
-            // write_led_strand(i, HIGH);
-
-            // led_strand.setPixelColor(i, led_strand.Color(0, 150, 0));
-            // led_strand.show();   // Send the updated pixel colors to the hardware.
-            delay(DELAY_TIME);
+            write_led_strand(i, int(leds[i]));
         }
         Serial.println();
-    }
-    
-    pixels.clear(); // Set all pixel colors to 'off'
-
-    // The first NeoPixel in a strand is #0, second is 1, all the way up
-    // to the count of pixels minus one.
-    for (int i = 1; i <= SLOTS_SIZE; i++) { // For each pixel...
-
-        // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-        // Here we're using a moderately bright green color:
-        pixels.setPixelColor(i, pixels.Color(0, 150 * int(leds[i]), 0));
-
-        pixels.show();   // Send the updated pixel colors to the hardware.
-
-        delay(DELAY_TIME); // Pause before next pass through loop
     }
 
     // Respond
