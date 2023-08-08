@@ -13,25 +13,12 @@
 
 #define DELAY_TIME 100
 
-String data;
-
-void update() {
-    Serial.print("[[ECHO]]");
-    data = Serial.readStringUntil('\n');
-    Serial.println(data);
-}
-
 // LED_0 is unused
 Adafruit_NeoPixel pixels(SLOTS_SIZE + 1, LED_STRAND_PIN, NEO_GRB + NEO_KHZ800);
 
 
 
 // // Reference: EasyNeoPixels.h created by Evelyn Masso, April 9, 2017.
-
-// void setup_led_strand(int pin, int num) {
-//   led_strand = Adafruit_NeoPixel(num, pin, NEO_GRB + NEO_KHZ800);
-//   led_strand.begin();
-// }
 
 // set the nth neopixel to a particular brightness of white
 // meant to be used with val as HIGH or LOW
@@ -61,7 +48,7 @@ void setup() {
 
     // [Step 4] Arduino waits until server is ready
     while (Serial.available() == 0) continue;
-    update();
+    // update();
     // [Step 5] Server starts to send messages
 
 
@@ -76,41 +63,48 @@ void setup() {
 }
 
 void loop() {
-    bool received = (Serial.available() > 0);
-    
-    // Update data if received command
-    if (received) {
-        update();
+
+    if (Serial.available() > 0) {
 
         // Parse data string to json
         DynamicJsonDocument doc(DOC_SIZE);
-        deserializeJson(doc, data);
+        DeserializationError err = deserializeJson(doc, Serial);
 
-        String command = doc["command"];
-        auto sensors = doc["sensors"];
-        auto leds = doc["leds"];
-
-        // TODO use Status design pattern
-        if (command == "read_sensors") {
-            for (int i = 0; i <= SLOTS_SIZE; i++) {
-                sensors[i] = analogRead(FORCE_SENSOR_0 + i);
-            }
-        }
-        else if (command == "write_leds") {
-            pixels.clear(); // Reset
-            Serial.print("[[DEBUG]]write_leds:");
-            for (int i = 1; i <= SLOTS_SIZE; i++) {
-                Serial.print(int(leds[i]));
-                write_led_strand(i, int(leds[i]));
-            }
-            Serial.println();
-        }
-
-        // Respond
-        doc["sender"] = "arduino";
+        Serial.print("[[ECHO]]");
         serializeJson(doc, Serial);
         Serial.println();
+
+        if (err == DeserializationError::Ok) {
+
+            String command = doc["command"];
+            auto sensors = doc["sensors"];
+            auto leds = doc["leds"];
+
+            // TODO use Status design pattern
+            if (command == "read_sensors") {
+                for (int i = 0; i <= SLOTS_SIZE; i++) {
+                    sensors[i] = analogRead(FORCE_SENSOR_0 + i);
+                }
+            }
+            else if (command == "write_leds") {
+                pixels.clear(); // Reset
+                Serial.print("[[DEBUG]]write_leds:");
+                for (int i = 1; i <= SLOTS_SIZE; i++) {
+                    Serial.print(int(leds[i]));
+                    write_led_strand(i, int(leds[i]));
+                }
+                Serial.println();
+            }
+
+            // Respond
+            doc["sender"] = "arduino";
+            serializeJson(doc, Serial);
+            Serial.println();
+        }
     }
+
+    while (Serial.available() > 0)
+        Serial.read();
 
     delay(DELAY_TIME);
 }
