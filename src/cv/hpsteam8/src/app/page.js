@@ -14,18 +14,18 @@ export default function Home() {
   const [clothingData, setClothingData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0); // Track current index
   // var cors = require("cors");
-  // useEffect(() => {
-  //   // 发送 GET 请求并获取数据
-  //   fetch("/data/", { mode: "cors" })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("host");
-  //       console.log(data); // 在控制台中输出获取的数据
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    // 发送 GET 请求并获取数据
+    fetch("http://localhost:8000/data/")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("host");
+        console.log(data); // 在控制台中输出获取的数据
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   // 取得所有衣服資料
   useEffect(() => {
