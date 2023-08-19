@@ -176,3 +176,62 @@ docker exec -it python-server sh -c "python3 test_docker_volume.py"
 ## Installation
 
 [Raspberry Pi 安裝 Google Mediapipe，3分鐘完成！ - CAVEDU教育團隊技術部落格](https://blog.cavedu.com/2021/11/16/raspberrypi-google-mediapipe/)
+
+# Backend (Express.js)
+
+## [Express application generator](https://expressjs.com/en/starter/generator.html)
+
+For example, the following creates an Express app named `server`. The app will be created in a folder named `server` in the current working directory and the view engine will be set to Pug:
+
+```bash
+express --view=pug server
+
+# change directory:
+cd server
+
+# install dependencies:
+npm install
+
+# To address all issues, run:
+npm audit fix --force
+
+# run the app:
+DEBUG=server:* npm start
+
+```
+
+Then load `http://localhost:3000/` in your browser to access the app.
+
+## [Express basic routing](https://expressjs.com/en/starter/basic-routing.html)
+
+Respond with `Hello World!` on the homepage:
+
+```javascript
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+```
+
+Respond to POST request on the root route (`/`), the application’s home page:
+
+```javascript
+app.post('/', (req, res) => {
+  res.send('Got a POST request')
+})
+```
+
+Respond to a PUT request to the `/user` route:
+
+```javascript
+app.put('/user', (req, res) => {
+  res.send('Got a PUT request at /user')
+})
+```
+
+Respond to a DELETE request to the `/user` route:
+
+```javascript
+app.delete('/user', (req, res) => {
+  res.send('Got a DELETE request at /user')
+})
+```
