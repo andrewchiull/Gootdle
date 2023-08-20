@@ -10,7 +10,8 @@ from src.cv.mp.pose import PoseDetection
 
 from settings import S
 
-DEBUG = S.DEBUG
+# DEBUG = S.DEBUG
+DEBUG = True
 
 mp_pose = mp.solutions.pose
 if DEBUG:
@@ -19,6 +20,7 @@ if DEBUG:
 
 # For webcam input:
 cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
+# cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
 fps = FPS().start()
 pose = PoseDetection().start()
 while cap.grabbed:

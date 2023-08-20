@@ -30,7 +30,7 @@ class ArduinoReader(threading.Thread):
 
 
 if __name__ == "__main__":
-    arduino = ArduinoReader(port=S.ARDUINO_PATH, baudrate=9600)  # replace with your port and baudrate
+    arduino = ArduinoReader(port=S.ARDUINO_PORT, baudrate=9600)  # replace with your port and baudrate
     arduino.start()
 
     try:

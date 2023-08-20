@@ -29,7 +29,7 @@ class Message(BaseModel):
 
 
 def main():
-    with ArduinoThread(port=S.ARDUINO_PATH) as arduino:
+    with ArduinoThread(port=S.ARDUINO_PORT) as arduino:
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
 

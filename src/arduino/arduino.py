@@ -76,7 +76,7 @@ class ArduinoThread(ReaderThread):
         return super().__enter__()
 
 if __name__ == '__main__':
-    with ArduinoThread(S.ARDUINO_PATH) as arduino:
+    with ArduinoThread(S.ARDUINO_PORT) as arduino:
         arduino: ArduinoControl
         while True:
             arduino.write_line("hello")

@@ -24,7 +24,7 @@ class PrintLines(LineReader):
     
 
 
-ser = serial.Serial(S.ARDUINO_PATH, baudrate=9600, timeout=1)
+ser = serial.Serial(S.ARDUINO_PORT, baudrate=9600, timeout=1)
 with ReaderThread(ser, PrintLines) as protocol:
     while True:
         protocol.write_line('hello')

@@ -5,7 +5,7 @@ from settings import S
 import serial
 import time
 if __name__ == '__main__':
-    ser = serial.Serial(S.ARDUINO_PATH, 9600, timeout=0.1)
+    ser = serial.Serial(S.ARDUINO_PORT, 9600, timeout=0.1)
     ser.reset_input_buffer()
 
     greeting =  "Connecting to Arduino..."
