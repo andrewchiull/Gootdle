@@ -19,8 +19,8 @@ def get_arduino_port():
 
 # [Settings Management - Pydantic](https://docs.pydantic.dev/latest/usage/pydantic_settings/)
 class Settings(BaseSettings):
-    model_config = ConfigDict(frozen=True)
     # [Config - Pydantic](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.frozen)
+    model_config = ConfigDict(frozen=True)
 
     DEBUG: bool = False
     ROOT: Path = Path(__file__).parent # Root of the project
