@@ -8,12 +8,28 @@ from settings import S
 
 from src.arduino.arduino import ArduinoThread, ArduinoControl
 
+# TODO Add debug mode
+
+import argparse
+
+# [argparse — Parser for command-line options, arguments and sub-commands — Python 3.11.4 documentation](https://docs.python.org/3/library/argparse.html#const)
+# [Python argparse 用法與範例 | ShengYu Talk](https://shengyu7697.github.io/python-argparse/)
+
+parser = argparse.ArgumentParser(description='Main function')
+
+parser.add_argument('-d', '--debug', dest='debug', action='store_const',
+                    const=True, default=False,
+                    help='turn on debug mode (default: off)')
+
+args = parser.parse_args()
+
+DEBUG = args.debug
+
+
+
 THRESHOLD = 2000
 SLEEP_SEC = 0.2
 
-# TODO Add debug mode
-DEBUG = True
-# DEBUG = False
 
 USING_0th = False
 
@@ -27,7 +43,7 @@ class Message(BaseModel):
     sender: str
     command: str
     sensors: List[Optional[int]] = list([None] * (SLOTS_SIZE+1))
-    leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1))
+    leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1)) # TODO 2 LEDs for each slot
 
 
 def main():
@@ -35,7 +51,7 @@ def main():
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.debug = DEBUG
 
-        # DOING SERIAL MONITOR
+        # TODO SERIAL MONITOR
         # TODO send Ctrl+C
         # FLUSH ANYTHING
         arduino.transport.serial.flush()

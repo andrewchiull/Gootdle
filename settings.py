@@ -6,6 +6,8 @@ from pydantic import ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from serial import SerialException
 
+# TODO Add a logger for different debug mode
+
 # [Develop a serial monitor with Python • AranaCorp](https://www.aranacorp.com/en/
 from serial.tools.list_ports import comports
 def get_arduino_port():

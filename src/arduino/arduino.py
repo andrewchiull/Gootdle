@@ -5,13 +5,12 @@ import traceback
 import serial
 from serial.threaded import ReaderThread
 
-from settings import S
-SLEEP_TIME = 1
 
 class ArduinoControl():
     
     debug = True
 
+    SLEEP_WAITING = 1
     TERMINATOR = b'\n'
     ENCODING = 'utf-8'
     UNICODE_HANDLING = 'replace'
@@ -22,13 +21,13 @@ class ArduinoControl():
     def read(self) -> str:
         return self._data_received
 
-    def connection_made(self, transport):
+    def connection_made(self, transport: ReaderThread):
         """Called when reader thread is started"""
         
         self.transport = transport
 
         while not self.transport.serial.in_waiting:
-            time.sleep(SLEEP_TIME)
+            time.sleep(SLEEP_WAITING)
             self.print("Waiting port to be opened...")
 
         self.print(f'Port {self.transport.serial.port} is opened\n')
@@ -76,6 +75,9 @@ class ArduinoThread(ReaderThread):
         return super().__enter__()
 
 if __name__ == '__main__':
+    from settings import S
+    # TODO Add arduino stimulation
+    # TODO Add Arduino basic testing with json
     with ArduinoThread(S.ARDUINO_PORT) as arduino:
         arduino: ArduinoControl
         while True:
