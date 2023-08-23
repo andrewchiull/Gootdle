@@ -10,6 +10,8 @@ from src.arduino.arduino import ArduinoThread, ArduinoControl
 
 THRESHOLD = 2000
 SLEEP_SEC = 0.2
+
+# TODO Add debug mode
 DEBUG = True
 # DEBUG = False
 
