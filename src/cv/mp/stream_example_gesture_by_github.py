@@ -3,6 +3,7 @@
 
 import mediapipe as mp
 import cv2
+import numpy as np
 
 BaseOptions = mp.tasks.BaseOptions
 GestureRecognizer = mp.tasks.vision.GestureRecognizer
@@ -13,13 +14,19 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 
 video = cv2.VideoCapture(0)
 
+class Result():
+    H, W = 1, 1
+    img = np.ndarray((H, W, 3), np.uint8) # empty image
+    gestures = list()
+res = Result()
+
 # Create a image segmenter instance with the live stream mode:
 def print_result(result: GestureRecognizerResult, output_image: mp.Image, timestamp_ms: int):
     # TODO imshow
-    # cv2.imshow('Show', output_image.numpy_view())
-    # imright = output_image.numpy_view()
+    res.img = output_image.numpy_view()
+    res.gestures = result.gestures
     print(result.gestures)
-    # cv2.imwrite('somefile.jpg', imright)
+
 
 
 options = GestureRecognizerOptions(
@@ -28,6 +35,7 @@ options = GestureRecognizerOptions(
     result_callback=print_result)
 
 timestamp = 0
+
 with GestureRecognizer.create_from_options(options) as recognizer:
   # The recognizer is initialized. Use it here.
     while video.isOpened(): 
@@ -45,6 +53,10 @@ with GestureRecognizer.create_from_options(options) as recognizer:
         # the `GestureRecognizerOptions` object.
         # The gesture recognizer must be created with the live stream mode.
         recognizer.recognize_async(mp_image, timestamp)
+
+        cv2.imshow('Show', res.img)
+        print("outside", res.gestures)
+        
 
         if cv2.waitKey(5) & 0xFF == 27:
             break
