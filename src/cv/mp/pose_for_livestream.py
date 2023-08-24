@@ -1,12 +1,14 @@
 # [Pose landmark detection guide for Python  |  MediaPipe  |  Google for Developers](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/python?authuser=2#live-stream)
 
 from settings import S, create_logger
+log = create_logger(__name__, "DEBUG")
+
 import cv2
 import numpy as np
 
 from imutils.video import WebcamVideoStream
 from imutils.video import FPS
-model_path = S.ROOT / "src/cv/mp" / "pose_landmarker_lite.task"
+MODEL_PATH = S.ROOT / "src/cv/mp" / "pose_landmarker_lite.task"
 
 
 import mediapipe as mp
@@ -38,22 +40,22 @@ def draw_landmarks_on_image(rgb_image, detection_result):
 BaseOptions = mp.tasks.BaseOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 
+class Output():
+    detection_result: PoseLandmarkerResult = None
+    image: mp.Image = None
+    timestamp_ms: int = None
+
+output = Output()
+
 # Create a pose landmarker instance with the live stream mode:
 def print_result(detection_result: PoseLandmarkerResult, image: mp.Image, timestamp_ms: int):
-    # TODO imshow
-    # print('pose landmarker result: {}'.format(detection_result))
-
-    # STEP 5: Process the detection result. In this case, visualize it.
-    annotated_image = draw_landmarks_on_image(image.numpy_view(), detection_result)
-    cv2.imshow("img", cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR))
-
-    # segmentation_mask = detection_result.segmentation_masks[0].numpy_view()
-    # visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2) * 255
-    # cv2.imshow("img",visualized_mask)
+    output.detection_result = detection_result
+    output.image = image
+    output.timestamp_ms = timestamp_ms
 
 
 options = PoseLandmarkerOptions(
-    base_options=BaseOptions(model_asset_path=model_path),
+    base_options=BaseOptions(model_asset_path=MODEL_PATH),
     running_mode=VisionRunningMode.LIVE_STREAM,
     result_callback=print_result)
 
@@ -78,7 +80,17 @@ with PoseLandmarker.create_from_options(options) as detector:
         
         # STEP 4: Detect pose landmarks from the input image.
         detector.detect_async(image, timestamp)
-        # detection_result = detector.detect_async(image, timestamp)
+
+        detection_result = output.detection_result
+
+        if detection_result:
+            # STEP 5: Process the detection result. In this case, visualize it.
+            annotated_image = draw_landmarks_on_image(frame, detection_result)
+            cv2.imshow("img", cv2.flip(annotated_image, 1))
+
+            # segmentation_mask = detection_result.segmentation_masks[0].numpy_view()
+            # visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2) * 255
+            # cv2.imshow("img",visualized_mask)
 
         if cv2.waitKey(5) & 0xFF == 27:
             break
