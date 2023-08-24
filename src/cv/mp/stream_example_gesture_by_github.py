@@ -1,5 +1,4 @@
-# [How to implement gesture\_recognizer.task for Live stream · Issue #4448 · google/mediapipe](https://github.com/google/mediapipe/issues/4448)
-# https://github.com/google/mediapipe/issues/4448#issuecomment-1562674509
+# [How to implement gesture\_recognizer.task for Live stream · Issue #4448 · google/mediapipe](https://github.com/google/mediapipe/issues/4448#issuecomment-1562674509)
 
 import mediapipe as mp
 import cv2

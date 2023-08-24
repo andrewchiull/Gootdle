@@ -1,20 +1,22 @@
 # [Pose landmark detection guide for Python  |  MediaPipe  |  Google for Developers](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/python?authuser=2#live-stream)
+# [How to implement gesture\_recognizer.task for Live stream · Issue #4448 · google/mediapipe](https://github.com/google/mediapipe/issues/4448#issuecomment-1562674509)
 
 from settings import S, create_logger
 log = create_logger(__file__, "DEBUG")
 
+import datetime
 import cv2
 import numpy as np
 
 from imutils.video import WebcamVideoStream
 from imutils.video import FPS
-MODEL_PATH = S.ROOT / "src/cv/mp" / "pose_landmarker_lite.task"
-
 
 import mediapipe as mp
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks.python.vision.pose_landmarker import PoseLandmarker, PoseLandmarkerOptions, PoseLandmarkerResult
+BaseOptions = mp.tasks.BaseOptions
+VisionRunningMode = mp.tasks.vision.RunningMode
 
 def draw_landmarks_on_image(rgb_image, detection_result):
     pose_landmarks_list = detection_result.pose_landmarks
@@ -36,10 +38,6 @@ def draw_landmarks_on_image(rgb_image, detection_result):
         solutions.drawing_styles.get_default_pose_landmarks_style())
     return annotated_image
 
-
-BaseOptions = mp.tasks.BaseOptions
-VisionRunningMode = mp.tasks.vision.RunningMode
-
 class Output():
     detection_result: PoseLandmarkerResult = None
     image: mp.Image = None
@@ -53,44 +51,53 @@ def print_result(detection_result: PoseLandmarkerResult, image: mp.Image, timest
     output.image = image
     output.timestamp_ms = timestamp_ms
 
+def create_detector(model_path: str):
+    options = PoseLandmarkerOptions(
+        base_options=BaseOptions(model_asset_path=model_path),
+        running_mode=VisionRunningMode.LIVE_STREAM,
+        result_callback=print_result)
+    return PoseLandmarker.create_from_options(options)
 
-options = PoseLandmarkerOptions(
-    base_options=BaseOptions(model_asset_path=MODEL_PATH),
-    running_mode=VisionRunningMode.LIVE_STREAM,
-    result_callback=print_result)
+class Detector(): # TODO clean up
+    def __init__(self) -> None:
+        pass
 
-# cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
-cap = WebcamVideoStream(src=0).start()
-fps = FPS().start()
-timestamp = 0
-with PoseLandmarker.create_from_options(options) as detector:
-    # The landmarker is initialized. Use it here.
+if __name__ == "__main__":
+    # cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
+    cap = WebcamVideoStream(src=0).start()
+    fps = FPS().start()
+    starttime = datetime.datetime.now()
+    MODEL_PATH = S.ROOT / "src/cv/mp" / "pose_landmarker_lite.task"
+    with create_detector(MODEL_PATH) as detector:
+        # The landmarker is initialized. Use it here.
 
-    while cap.grabbed:
-        fps.update()
-        frame = cap.read()
-        timestamp += 1
-        # cv2.imshow('MediaPipe Pose',
-        #         #    frame,
-        #            cv2.flip(frame, 1)
-        # )
+        while cap.grabbed:
+            fps.update()
+            frame = cap.read()
+            timestamp_ms = (datetime.datetime.now() - starttime) // datetime.timedelta(microseconds=1)
 
-        # STEP 3: Load the input image.
-        image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
-        
-        # STEP 4: Detect pose landmarks from the input image.
-        detector.detect_async(image, timestamp)
 
-        detection_result = output.detection_result
+            # STEP 3: Load the input image.
+            image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
+            
+            # STEP 4: Detect pose landmarks from the input image.
+            detector.detect_async(image, timestamp_ms)
 
-        if detection_result:
-            # STEP 5: Process the detection result. In this case, visualize it.
-            annotated_image = draw_landmarks_on_image(frame, detection_result)
-            cv2.imshow("img", cv2.flip(annotated_image, 1))
+            result = output.detection_result
+            if result:
+                # STEP 5: Process the detection result. In this case, visualize it.
+                annotated_image = draw_landmarks_on_image(frame, result)
+                cv2.imshow("img", cv2.flip(annotated_image, 1))
 
-            # segmentation_mask = detection_result.segmentation_masks[0].numpy_view()
-            # visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2) * 255
-            # cv2.imshow("img",visualized_mask)
 
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
+            if cv2.waitKey(5) & 0xFF == 27:
+                break
+
+    # stop the timer and display FPS information
+    fps.stop()
+    print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
+    print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+
+    # do a bit of cleanup
+    cv2.destroyAllWindows()
+    cap.stop()
