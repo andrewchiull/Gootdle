@@ -4,9 +4,11 @@ from pathlib import Path
 from typing import Optional
 ROOT_PATH = Path(__file__).parent # Root of the project
 
-def create_logger(name: str, level: str):
+def create_logger(file: str, level: str):
     import logging
     import sys
+    module_path = Path(file).relative_to(ROOT_PATH)
+    name = str(module_path.with_suffix('')).replace("/", ".")
 
     numeric_level: int = getattr(logging, level.upper(), None)
     if not isinstance(numeric_level, int):
@@ -35,7 +37,7 @@ def create_logger(name: str, level: str):
     logger.debug(f"Logger {name} STARTS")
     return logger
 
-log = create_logger(__name__, "DEBUG")
+log = create_logger(__file__, "DEBUG")
 
 
 import platform
@@ -84,7 +86,7 @@ SerialException                           Traceback (most recent call last)
     5 from pydantic import BaseModel
     6 from pydantic_core import ValidationError
 ----> 7 from settings import create_logger
-    8 log = create_logger(__name__, "DEBUG")
+    8 log = create_logger(__file__, "DEBUG")
     9 # from settings import S
 
 ~/Google-HPS-2023-Team8/settings.py in <module>

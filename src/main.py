@@ -5,7 +5,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 from pydantic_core import ValidationError
 from settings import S, create_logger
-log = create_logger(__name__, "DEBUG")
+log = create_logger(__file__, "DEBUG")
 
 from src.arduino.arduino import ArduinoThread, ArduinoControl
 

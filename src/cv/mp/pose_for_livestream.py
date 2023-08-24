@@ -1,7 +1,7 @@
 # [Pose landmark detection guide for Python  |  MediaPipe  |  Google for Developers](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/python?authuser=2#live-stream)
 
 from settings import S, create_logger
-log = create_logger(__name__, "DEBUG")
+log = create_logger(__file__, "DEBUG")
 
 import cv2
 import numpy as np
