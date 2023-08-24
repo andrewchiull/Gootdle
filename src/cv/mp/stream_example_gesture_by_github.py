@@ -14,18 +14,20 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 
 video = cv2.VideoCapture(0)
 
-class Result():
-    H, W = 1, 1
-    img = np.ndarray((H, W, 3), np.uint8) # empty image
-    gestures = list()
-res = Result()
+class Output():
+    result: GestureRecognizerResult = None
+    output_image: mp.Image = None
+    timestamp_ms: int = None
+
+output = Output()
 
 # Create a image segmenter instance with the live stream mode:
 def print_result(result: GestureRecognizerResult, output_image: mp.Image, timestamp_ms: int):
     # TODO imshow
-    res.img = output_image.numpy_view()
-    res.gestures = result.gestures
-    print(result.gestures)
+    output.result = result
+    output.output_image = output_image
+    output.timestamp_ms = timestamp_ms
+
 
 
 
@@ -54,8 +56,9 @@ with GestureRecognizer.create_from_options(options) as recognizer:
         # The gesture recognizer must be created with the live stream mode.
         recognizer.recognize_async(mp_image, timestamp)
 
-        cv2.imshow('Show', res.img)
-        print("outside", res.gestures)
+        res = output.result
+        if res:
+            print(res.gestures)
         
 
         if cv2.waitKey(5) & 0xFF == 27:
