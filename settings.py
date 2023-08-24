@@ -1,7 +1,11 @@
 # %%
+# TODO seperate logging
+
+import os
+LOG_LEVEL = os.environ["LOG_LEVEL"]
+print(f"{LOG_LEVEL = }")
 
 from pathlib import Path
-from typing import Optional
 ROOT_PATH = Path(__file__).parent # Root of the project
 
 def create_logger(file: str, level: str):
@@ -35,11 +39,12 @@ def create_logger(file: str, level: str):
     logger.addHandler(console_handler)
     
     logger.debug(f"Logger {name} STARTS")
+    logger.debug(f"The log file stores at: {FILE.absolute()}")
     return logger
 
-log = create_logger(__file__, "DEBUG")
+log = create_logger(__file__, LOG_LEVEL)
 
-
+from typing import Optional
 import platform
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -117,8 +122,8 @@ SerialException: Arduino device is not found. Current usb ports: None.
 class Settings(BaseSettings):
     # [Config - Pydantic](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.frozen)
     model_config = ConfigDict(frozen=True)
-
-    DEBUG: bool = False
+    LOG_LEVEL: str = "INFO"
+    # DEBUG: bool = True if LOG_LEVEL == "DEBUG" else False
     ROOT: Path = ROOT_PATH
     OS: str = platform.system()
     ARDUINO_PORT: Optional[str] = get_arduino_port()

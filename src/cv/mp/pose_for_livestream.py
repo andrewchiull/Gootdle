@@ -3,7 +3,7 @@
 
 from typing import Optional
 from settings import S, create_logger
-log = create_logger(__file__, "DEBUG") # TODO use loggin level in S
+log = create_logger(__file__, S.LOG_LEVEL)
 
 import datetime
 import numpy as np
