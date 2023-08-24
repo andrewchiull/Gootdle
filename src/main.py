@@ -4,7 +4,8 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 from pydantic_core import ValidationError
-from settings import S
+from settings import S, create_logger
+log = create_logger(__name__, "DEBUG")
 
 from src.arduino.arduino import ArduinoThread, ArduinoControl
 
@@ -147,4 +148,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        log.exception(e)

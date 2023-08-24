@@ -18,7 +18,7 @@
 ```
 
 
-# [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder/50194143#50194143)
+## [python - Importing modules from parent folder - Stack Overflow](https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder/50194143#50194143)
 
 ```python
 # setup.py
@@ -30,6 +30,7 @@ setup(name='myproject', version='1.0', packages=find_packages())
 ```bash
 pip install -e .
 ```
+## TODO logging level as DEBUG or INFO 
 
 # Raspberry Pi
 
@@ -108,6 +109,8 @@ nano ~/.zshrc
 # export PATH="/Directory1:$PATH"
 ```
 
+## TODO Match pattern
+
 # Git/GitHub
 
 ## Tutorial
@@ -176,6 +179,13 @@ docker exec -it python-server sh -c "python3 test_docker_volume.py"
 ## Installation
 
 [Raspberry Pi 安裝 Google Mediapipe，3分鐘完成！ - CAVEDU教育團隊技術部落格](https://blog.cavedu.com/2021/11/16/raspberrypi-google-mediapipe/)
+
+
+# Frontend (React)
+
+- TODO show webcam w/ holistic
+- TODO detect ok gesture
+
 
 # Backend (Express.js)
 
