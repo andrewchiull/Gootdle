@@ -66,10 +66,8 @@ mp_holistic = mp.solutions.holistic
 
 
 # For webcam input:
-# cap = cv2.VideoCapture(S.VIDEO_SOURCE)
-cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
-# cap = cv2.VideoCapture(0)
-# cap = WebcamVideoStream(src=0).start()
+# cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
+cap = WebcamVideoStream(src=0).start()
 fps = FPS().start()
 with mp_holistic.Holistic(
     min_detection_confidence=0.5,

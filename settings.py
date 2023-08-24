@@ -54,9 +54,10 @@ def get_arduino_port():
         port =  usb_ports[0]
         return port
     except IndexError as e:
-        log.exception(e)
-        raise SerialException(f"Arduino device is not found. Current usb ports: {usb_ports if usb_ports else None}.")
+        log.exception(f"Arduino device is not found. Current usb ports: {usb_ports if usb_ports else None}.")
+        # raise SerialException(f"Arduino device is not found. Current usb ports: {usb_ports if usb_ports else None}.")
         # import setting 的時候就會 raise，沒辦法在 main 接
+        return None
 
 """
 ╭─ 19:09:13  andrewchiu@Andrew-MBP  ~/Google-HPS-2023-Team8   main ● ↑4 ⍟1 
@@ -134,8 +135,8 @@ class Settings(BaseSettings):
 
 
 # %%
-# try:
-#     S = Settings()
-#     # pass
-# except Exception as e:
-#     log.exception(e)
+try:
+    S = Settings()
+    # pass
+except Exception as e:
+    log.exception(e)
