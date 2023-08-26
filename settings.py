@@ -60,7 +60,7 @@ def get_arduino_port():
     
     try:
         port =  usb_ports[0]
-        return port
+        return "/dev/" + port
     except IndexError as e:
         log.exception(f"Arduino device is not found. Current usb ports: {usb_ports if usb_ports else None}.")
         # raise SerialException(f"Arduino device is not found. Current usb ports: {usb_ports if usb_ports else None}.")
@@ -124,7 +124,7 @@ class Settings(BaseSettings):
     # [Config - Pydantic](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.frozen)
     model_config = ConfigDict(frozen=True)
     LOG_LEVEL: str = "INFO"
-    # DEBUG: bool = True if LOG_LEVEL == "DEBUG" else False
+    DEBUG: bool = True if LOG_LEVEL == "DEBUG" else False
     ROOT: Path = ROOT_PATH
     OS: str = platform.system()
     ARDUINO_PORT: Optional[str] = get_arduino_port()
