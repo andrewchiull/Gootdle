@@ -1,5 +1,5 @@
 # %%
-# TODO seperate logging
+# TODO separate logging
 
 import os
 LOG_LEVEL = os.environ["LOG_LEVEL"]
@@ -56,7 +56,8 @@ from serial import SerialException
 from serial.tools.list_ports import comports
 
 def get_arduino_port():
-    usb_ports = [p.name for p in comports() if "tty" in p.name]
+    usb_ports = [p.name for p in comports() if ("tty" in p.name) or ("usb" in p.name)]
+    
     try:
         port =  usb_ports[0]
         return port
@@ -127,9 +128,9 @@ class Settings(BaseSettings):
     ROOT: Path = ROOT_PATH
     OS: str = platform.system()
     ARDUINO_PORT: Optional[str] = get_arduino_port()
-
     VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/fisheye.MOV")
     # VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/white_tshirt.MOV")
+    SLOTS_SIZE: int = 5
 
 
     # [Settings Management - Pydantic](https://docs.pydantic.dev/latest/usage/pydantic_settings/)

@@ -2,7 +2,7 @@
 
 # %%
 from serial.tools.list_ports import comports
-usb_ports = [p.name for p in comports() if "tty" in p.name]
+usb_ports = [p.name for p in comports() if ("tty" in p.name) or ("usb" in p.name)]
 print(usb_ports)
 
 
