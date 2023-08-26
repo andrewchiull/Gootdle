@@ -54,7 +54,7 @@ def main():
                 arduino.write_line("SERVER_IS_READY")
                 break
             else:
-                log.info("Waiting for 'ARDUINO_IS_READY'...")
+                log.debug("Waiting for 'ARDUINO_IS_READY'...")
                 sleep(SLEEP_SEC)
         
         # [Step 4] Arduino waits until server is ready
@@ -62,18 +62,15 @@ def main():
 
         def get_respond(command):  # TODO very ugly
             raw_respond = arduino.read()
-            log.info(f"{raw_respond = }")
+            log.debug(f"{raw_respond = }")
             # Ignore the initial state
             if raw_respond == "ARDUINO_IS_READY":
-                return None
-
-            # Ignore the initial state
-            if raw_respond == r"{}":
                 return None
 
             # Ignore echos
             if raw_respond.startswith("[[ECHO]]"):
                 return None
+
             # Ignore DEBUG
             if raw_respond.startswith("[["):
                 return None

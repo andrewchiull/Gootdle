@@ -20,8 +20,6 @@ class Message(BaseModel):
     leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1) * 2) # TODO 2 LEDs for each slot
 
 class ArduinoControl():
-    
-    debug = True
 
     SLEEP_WAITING = 1
     TERMINATOR = b'\n'
@@ -41,14 +39,9 @@ class ArduinoControl():
 
         while not self.transport.serial.in_waiting:
             time.sleep(self.SLEEP_WAITING)
-            self.print("Waiting port to be opened...")
+            log.debug("Waiting port to be opened...")
 
-        self.print(f'Port {self.transport.serial.port} is opened\n')
-
-    def print(self, message: str):
-        # TODO add logging
-        # TODO add color # import colorama
-        log.debug(f"[INFO] {message}")
+        log.info(f'Port {self.transport.serial.port} is opened\n')
 
     def data_received(self, data):
         """Buffer received data, find TERMINATOR, call handle_packet"""
@@ -62,16 +55,16 @@ class ArduinoControl():
 
     def handle_line(self, data: str):
         self._data_received = data.rstrip() # Remove '\r' or '\n'
-        self.print(f'<<< {self._data_received !r}')
+        log.debug(f'<<< {self._data_received !r}')
 
     def write_line(self, text: str) -> None:
         self.transport.write(f"{text}\n".encode(self.ENCODING, self.UNICODE_HANDLING))
         
-        self.print(f">>> {text !r}")
+        log.debug(f">>> {text !r}")
 
     def connection_lost(self, exc: Exception) -> None:
         """Forget transport"""
-        self.print('Serial port is closed')
+        log.info('Serial port is closed')
         try:
             self.transport = None
         except Exception :
