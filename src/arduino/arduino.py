@@ -29,7 +29,9 @@ class ArduinoControl():
     buffer = bytearray()
     _data_received = str()
 
-    def read(self) -> str:
+    def read_raw_data(self) -> str:
+        # TODO send signal from thread
+        log.debug(f"{self._data_received = }")
         return self._data_received
 
     def connection_made(self, transport: ReaderThread):
@@ -81,10 +83,12 @@ class ArduinoThread(ReaderThread):
 
 if __name__ == '__main__':
     from settings import S
+    log.debug("Arduino starts")
+
     # TODO Add arduino stimulation
     # TODO Add Arduino basic testing with json
-    with ArduinoThread(S.ARDUINO_PORT) as arduino:
-        arduino: ArduinoControl
+    with ArduinoThread(port=S.ARDUINO_PORT) as arduino:
         while True:
-            arduino.write_line("hello")
+            log.debug("Hello world!")
+            arduino.write_line(r"{}")
             time.sleep(1)

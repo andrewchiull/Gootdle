@@ -50,8 +50,8 @@ def main():
         # [Step 2] Server waits until ARDUINO_IS_READY
         while True:
             # [Step 3] Server responds that SERVER_IS_READY
-            if arduino.read() == "ARDUINO_IS_READY":
-                arduino.write_line("SERVER_IS_READY")
+            if arduino.read_raw_data() == "ARDUINO_IS_READY":
+                log.info("SERVER_IS_READY")
                 break
             else:
                 log.debug("Waiting for 'ARDUINO_IS_READY'...")
@@ -61,8 +61,7 @@ def main():
         # [Step 5] Server starts to send messages
 
         def get_respond(command):  # TODO very ugly
-            raw_respond = arduino.read()
-            log.debug(f"{raw_respond = }")
+            raw_respond = arduino.read_raw_data()
             # Ignore the initial state
             if raw_respond == "ARDUINO_IS_READY":
                 return None
@@ -104,7 +103,7 @@ def main():
                        for V_out in read_sensors_respond.sensors]
             
             if not USING_0th: sensors[0] = None # Not used
-            log.debug(f"{sensors = }")
+            log.info(f"{sensors = }")
             sleep(SLEEP_SEC)
 
             def threshold(sensor: int) -> int:

@@ -103,6 +103,7 @@ void loop() {
         }
     }
 
+    // Clear buffer
     while (Serial.available() > 0)
         Serial.read();
 
