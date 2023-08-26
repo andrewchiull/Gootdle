@@ -1,4 +1,3 @@
-# DONE Add debug mode
 import argparse
 # [argparse — Parser for command-line options, arguments and sub-commands — Python 3.11.4 documentation](https://docs.python.org/3.8/library/argparse.html#const)
 # [Python argparse 用法與範例 | ShengYu Talk](https://shengyu7697.github.io/python-argparse/)
@@ -19,13 +18,10 @@ os.environ["LOG_LEVEL"] = "DEBUG" if args.debug else args.log_level
 import time
 from time import sleep
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel
-from pydantic_core import ValidationError
 from settings import S, create_logger
 log = create_logger(__file__, S.LOG_LEVEL)
 
-from src.arduino.arduino import ArduinoThread, ArduinoControl
+from src.arduino.arduino import ArduinoThread, ArduinoControl, Message
 
 
 THRESHOLD = 2000
@@ -38,14 +34,6 @@ V_in = 1024
 R_f = 10E+3
 SCALE = 1E+6
 SLOTS_SIZE = 5
-
-class Message(BaseModel):
-    timestamp: str
-    sender: str
-    command: str
-    sensors: List[Optional[int]] = list([None] * (SLOTS_SIZE+1))
-    leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1)) # TODO 2 LEDs for each slot
-
 
 def main():
     with ArduinoThread(port=S.ARDUINO_PORT) as arduino: # TODO What if arduino fails?

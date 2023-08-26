@@ -1,10 +1,23 @@
 # [pySerial API — pySerial 3.4 documentation](https://pyserial.readthedocs.io/en/latest/pyserial_api.html#serial.threaded.ReaderThread)
 
+from settings import S, create_logger
+log = create_logger(__file__, S.LOG_LEVEL)
+
 import time
 import traceback
+from typing import Optional, List
+from pydantic import BaseModel
 import serial
 from serial.threaded import ReaderThread
 
+SLOTS_SIZE = S.SLOTS_SIZE
+
+class Message(BaseModel):
+    timestamp: str
+    sender: str
+    command: str
+    sensors: List[Optional[int]] = list([None] * (SLOTS_SIZE+1))
+    leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1) * 2) # TODO 2 LEDs for each slot
 
 class ArduinoControl():
     
@@ -27,7 +40,7 @@ class ArduinoControl():
         self.transport = transport
 
         while not self.transport.serial.in_waiting:
-            time.sleep(SLEEP_WAITING)
+            time.sleep(self.SLEEP_WAITING)
             self.print("Waiting port to be opened...")
 
         self.print(f'Port {self.transport.serial.port} is opened\n')
@@ -35,8 +48,7 @@ class ArduinoControl():
     def print(self, message: str):
         # TODO add logging
         # TODO add color # import colorama
-        if self.debug:
-            print(f"[INFO] {message}")
+        log.debug(f"[INFO] {message}")
 
     def data_received(self, data):
         """Buffer received data, find TERMINATOR, call handle_packet"""
