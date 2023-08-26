@@ -33,6 +33,9 @@ class ArduinoControl():
         # TODO send signal from thread
         return self._data_received
 
+    def clear_raw_data(self):
+        self._data_received = None
+
     def connection_made(self, transport: ReaderThread):
         """Called when reader thread is started"""
         
