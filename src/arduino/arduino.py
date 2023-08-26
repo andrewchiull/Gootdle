@@ -31,7 +31,6 @@ class ArduinoControl():
 
     def read_raw_data(self) -> str:
         # TODO send signal from thread
-        log.debug(f"{self._data_received = }")
         return self._data_received
 
     def connection_made(self, transport: ReaderThread):

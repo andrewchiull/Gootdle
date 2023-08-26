@@ -77,9 +77,10 @@ def main():
             try:
                 respond: Message = Message.model_validate_json(raw_respond)
                 if respond.command != command:
-                    raise Exception(f"Expected {command = }")
+                    log.debug(f"Expected {command = }, but {respond.command = }")
+                    return None
             except Exception as e:
-                log.info(f"{e !r}")
+                log.exception(e)
                 return None
             respond.timestamp = datetime.now().isoformat()
             return respond
@@ -96,9 +97,11 @@ def main():
                 sleep(SLEEP_SEC)
                 read_sensors_respond = get_respond("read_sensors")
                 if read_sensors_respond:
+                    log.debug(f"{read_sensors_respond!r}")
                     break
 
-            log.info(f"{read_sensors_respond!r}")
+            log.info(f"{read_sensors_respond.sensors = }")
+
             sensors = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
                        for V_out in read_sensors_respond.sensors]
             
@@ -121,10 +124,10 @@ def main():
                 sleep(SLEEP_SEC)
                 write_leds_respond = get_respond("write_leds")
                 if write_leds_respond:
-                    log.info(f"{write_leds_respond!r}")
+                    log.debug(f"{write_leds_respond!r}")
                     break
 
-            log.debug(f"{write_leds_respond.leds = }")
+            log.info(f"{write_leds_respond.leds = }")
 
             sleep(SLEEP_SEC)
 
