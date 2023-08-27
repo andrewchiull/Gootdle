@@ -36,6 +36,8 @@ R_f = 10E+3
 SCALE = 1E+6
 
 def main():
+    # import cv2 # for waitKey
+    # cv2.imshow("nothing", S.EMPTY_IMAGE)
     with ArduinoThread(port=S.ARDUINO_PORT) as arduino: # TODO What if arduino fails?
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.initialize()
@@ -71,6 +73,8 @@ def main():
                     continue
                 leds.append(threshold(i, reading))
                 leds.append(threshold(i, reading))
+
+            # cv2.waitKey(0)
 
             result = arduino.send_command("write_leds", leds=leds)
             log.info(f"{result.leds = }")
