@@ -71,8 +71,9 @@ def main():
                 if i == 0:
                     # Ignore sensor #0
                     continue
-                leds.append(threshold(i, reading))
-                leds.append(threshold(i, reading))
+                high_or_low = threshold(i, reading) * 255
+                leds.append([high_or_low, high_or_low, high_or_low])
+                leds.append([high_or_low, high_or_low, high_or_low])
 
             # cv2.waitKey(0)
 

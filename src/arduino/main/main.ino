@@ -94,7 +94,11 @@ void loop() {
                 Serial.print("[[DEBUG]]write_leds:");
                 for (int i = 0; i < LEDS_SIZE; i++) {
                     Serial.print(int(leds[i]));
-                    write_led_strand(i, int(leds[i]));
+                    // write_led_strand(i, int(leds[i]));
+                    int R = int(leds[i][0]);
+                    int G = int(leds[i][1]);
+                    int B = int(leds[i][2]);
+                    write_led_strand(i, R, G, B);
                 }
                 Serial.println();
             }

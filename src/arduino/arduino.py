@@ -19,7 +19,7 @@ class Message(BaseModel):
     sender: str
     command: str
     sensors: List[Optional[int]] = list([None] * (SLOTS_SIZE+1))
-    leds: List[Optional[int]] = list([None] * (SLOTS_SIZE+1) * 2) # TODO 2 LEDs for each slot
+    leds: List[Optional[List[int]]] = list([None] * (SLOTS_SIZE+1) * 2) # TODO 2 LEDs for each slot
 
 class ArduinoControl():
 
