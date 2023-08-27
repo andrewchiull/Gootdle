@@ -28,7 +28,19 @@ THRESHOLD = {
     3: 2000,
     4: 2000,
     5: 2000,
-    }
+}
+
+class LedColor():
+    # TODO use hex
+    R = [255,0,0]
+    G = [0,255,0]
+    B = [0,0,255]
+    C = [0,255,255]
+    M = [255,0,255]
+    Y = [255,255,0]
+    K = [0,0,0]
+    W = [255,255,255]
+
 SLEEP_SEC = 0.1
 
 V_in = 1024
@@ -36,13 +48,35 @@ R_f = 10E+3
 SCALE = 1E+6
 
 def main():
-    # import cv2 # for waitKey
-    # cv2.imshow("nothing", S.EMPTY_IMAGE)
+    import cv2 # for waitKey
+    cv2.imshow("nothing", S.EMPTY_IMAGE)
     with ArduinoThread(port=S.ARDUINO_PORT) as arduino: # TODO What if arduino fails?
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.initialize()
+        
+        DEMO_MODE = True
 
         while True:
+            c = LedColor()
+            if DEMO_MODE:
+                log.info(f"{DEMO_MODE = }")
+                def show_colors(colors: str):
+                    leds = list()
+                    for color in colors:
+                        leds.append(getattr(c, color))
+                        leds.append(getattr(c, color))
+                    log.info(colors)
+                    log.info(leds)
+                    arduino.send_command("write_leds", leds=leds)
+                
+                
+                show_colors("WKWKW")
+                cv2.waitKey(0)
+                
+                show_colors("WKKWK")
+                cv2.waitKey(0)
+                continue
+                
             result = arduino.send_command("read_sensors")
             log.info(f"{result.sensors = }")
 
@@ -75,7 +109,6 @@ def main():
                 leds.append([high_or_low, high_or_low, high_or_low])
                 leds.append([high_or_low, high_or_low, high_or_low])
 
-            # cv2.waitKey(0)
 
             result = arduino.send_command("write_leds", leds=leds)
             log.info(f"{result.leds = }")
