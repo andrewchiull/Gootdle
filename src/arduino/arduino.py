@@ -4,6 +4,7 @@ from settings import S, create_logger
 log = create_logger(__file__, S.LOG_LEVEL)
 
 import time
+from datetime import datetime
 import traceback
 from typing import Optional, List
 from pydantic import BaseModel
@@ -11,6 +12,7 @@ import serial
 from serial.threaded import ReaderThread
 
 SLOTS_SIZE = S.SLOTS_SIZE
+SLEEP_SEC = 0.1
 
 class Message(BaseModel):
     timestamp: str
@@ -47,6 +49,18 @@ class ArduinoControl():
 
         log.info(f'Port {self.transport.serial.port} is opened\n')
 
+    def initialize(self):
+        # Initialization
+        self.transport.serial.flush()
+        self.buffer = bytearray()
+        while True:
+            if self.read_raw_data() == "ARDUINO_IS_READY":
+                log.info("SERVER_IS_READY")
+                break
+            else:
+                log.debug("Waiting for 'ARDUINO_IS_READY'...")
+                time.sleep(SLEEP_SEC)
+
     def data_received(self, data):
         """Buffer received data, find TERMINATOR, call handle_packet"""
         self.buffer.extend(data)
@@ -68,11 +82,54 @@ class ArduinoControl():
 
     def connection_lost(self, exc: Exception) -> None:
         """Forget transport"""
+        # TODO turn off leds
         log.info('Serial port is closed')
         try:
             self.transport = None
         except Exception :
             traceback.print_exception()
+
+
+    def get_respond(self, command: str):  # TODO very ugly
+        raw_respond = self.read_raw_data()
+
+        # Ignore
+        if (raw_respond is None
+            or raw_respond == "ARDUINO_IS_READY"
+            or raw_respond.startswith("[[ECHO]]")
+            or raw_respond.startswith("[[DEBUG]]")):
+            log.debug(f"Ignore {raw_respond = }")
+            return None
+
+        try:
+            # TODO buggy
+            respond: Message = Message.model_validate_json(raw_respond)
+        except Exception as e:
+            log.exception(e)
+            return None
+        respond.timestamp = datetime.now().isoformat()
+
+        if respond.command != command:
+            log.debug(f"Expected {command = }, but {respond.command = }")
+            return None
+        
+        self.clear_raw_data()
+        return respond
+    
+    def send_command(self, command, **kwarg):
+        log.info(f"Send {command = }")
+        msg = Message(command=command, sender="server", timestamp=datetime.now().isoformat(), **kwarg)
+        self.write_line(msg.model_dump_json())
+
+        while True:
+            time.sleep(SLEEP_SEC)
+            result = self.get_respond(command)
+            if result:
+                log.debug(f"{result = !r}")
+                break
+
+        return result
+
 
 class ArduinoThread(ReaderThread):
     def __init__(self, port: str) -> None:
@@ -87,10 +144,10 @@ if __name__ == '__main__':
     from settings import S
     log.debug("Arduino starts")
 
-    # TODO Add arduino stimulation
-    # TODO Add Arduino basic testing with json
-    with ArduinoThread(port=S.ARDUINO_PORT) as arduino:
-        while True:
-            log.debug("Hello world!")
-            arduino.write_line(r"{}")
-            time.sleep(1)
+    # # TODO Add arduino stimulation
+    # # TODO Add Arduino basic testing with json
+    # with ArduinoThread(port=S.ARDUINO_PORT) as arduino:
+    #     while True:
+    #         log.debug("Hello world!")
+    #         arduino.write_line(r"{}")
+    #         time.sleep(1)

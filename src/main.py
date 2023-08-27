@@ -15,18 +15,15 @@ args = parser.parse_args()
 import os
 os.environ["LOG_LEVEL"] = "DEBUG" if args.debug else args.log_level
 
-import time
 from time import sleep
-from datetime import datetime
 from settings import S, create_logger
 log = create_logger(__file__, S.LOG_LEVEL)
 
-from src.arduino.arduino import ArduinoThread, ArduinoControl, Message
+from src.arduino.arduino import ArduinoThread, ArduinoControl
 
 
 THRESHOLD = 2000
 SLEEP_SEC = 0.1
-
 
 USING_0th = False
 
@@ -37,84 +34,38 @@ SCALE = 1E+6
 def main():
     with ArduinoThread(port=S.ARDUINO_PORT) as arduino: # TODO What if arduino fails?
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
-        arduino.debug = S.DEBUG
-
-        arduino.transport.serial.flush()
-        arduino.buffer = bytearray()
-
-        # [Step 1] Arduino responds that ARDUINO_IS_READY
-        # [Step 2] Server waits until ARDUINO_IS_READY
-        while True:
-            # [Step 3] Server responds that SERVER_IS_READY
-            if arduino.read_raw_data() == "ARDUINO_IS_READY":
-                log.info("SERVER_IS_READY")
-                break
-            else:
-                log.debug("Waiting for 'ARDUINO_IS_READY'...")
-                sleep(SLEEP_SEC)
-        
-        # [Step 4] Arduino waits until server is ready
-        # [Step 5] Server starts to send messages
-
-        def get_respond(command: str):  # TODO very ugly
-            raw_respond = arduino.read_raw_data()
-
-            # Ignore
-            if (raw_respond is None
-                or raw_respond == "ARDUINO_IS_READY"
-                or raw_respond.startswith("[[ECHO]]")
-                or raw_respond.startswith("[[DEBUG]]")):
-                log.debug(f"Ignore {raw_respond = }")
-                return None
-
-            try:
-                respond: Message = Message.model_validate_json(raw_respond)
-            except Exception as e:
-                log.exception(e)
-                return None
-            respond.timestamp = datetime.now().isoformat()
- 
-            if respond.command != command:
-                log.debug(f"Expected {command = }, but {respond.command = }")
-                return None
-            
-            arduino.clear_raw_data()
-            return respond
-        
-        def send_command(command, **kwarg):
-            log.info(f"Send {command = }")
-            msg = Message(command=command, sender="server", timestamp=datetime.now().isoformat(), **kwarg)
-            arduino.write_line(msg.model_dump_json())
-
-            while True:
-                sleep(SLEEP_SEC)
-                result = get_respond(command)
-                if result:
-                    log.debug(f"{result = !r}")
-                    break
-
-            return result
+        arduino.initialize()
 
         while True:
-
-            result = send_command("read_sensors")
+            result = arduino.send_command("read_sensors")
             log.info(f"{result.sensors = }")
 
-            sensors = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
+            # Convert readings
+            readings = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
                        for V_out in result.sensors]
             
-            if not USING_0th: sensors[0] = None # Not used
-            log.info(f"{sensors = }")
+            if not USING_0th: # Ignore sensor #0
+                readings[0] = None
+            log.info(f"{readings = }")
             sleep(SLEEP_SEC)
 
-            def threshold(sensor: int) -> int:
-                return int(sensor > THRESHOLD) if sensor else None
-
-            leds = list(map(threshold, sensors))
-            if not USING_0th: leds[0] = None # Not used
+            def threshold(reading: int) -> int:
+                return int(reading > THRESHOLD) if reading else None
 
 
-            result = send_command("write_leds", leds=leds)
+            leds = list()
+            # 2 leds for each sensor, e.g.:
+            # sensor #0 -> led #0 ONLY
+            # sensor #1 -> led #1, #2
+            # sensor #2 -> led #3, #4
+            for reading in readings[1:]:
+                leds.append(threshold(reading))
+                leds.append(threshold(reading))
+
+            # Insert led #0 if USING_0th
+            leds.insert(0, threshold(readings[0]) if USING_0th else None)
+
+            result = arduino.send_command("write_leds", leds=leds)
             log.info(f"{result.leds = }")
 
             sleep(SLEEP_SEC)
