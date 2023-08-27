@@ -22,10 +22,14 @@ log = create_logger(__file__, S.LOG_LEVEL)
 from src.arduino.arduino import ArduinoThread, ArduinoControl
 
 
-THRESHOLD = 2000
+THRESHOLD = {
+    1: 500,
+    2: 2000,
+    3: 2000,
+    4: 2000,
+    5: 2000,
+    }
 SLEEP_SEC = 0.1
-
-USING_0th = False
 
 V_in = 1024
 R_f = 10E+3
@@ -44,26 +48,29 @@ def main():
             readings = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
                        for V_out in result.sensors]
             
-            if not USING_0th: # Ignore sensor #0
-                readings[0] = None
+            # Ignore sensor #0
+            readings[0] = None
             log.info(f"{readings = }")
             sleep(SLEEP_SEC)
 
-            def threshold(reading: int) -> int:
-                return int(reading > THRESHOLD) if reading else None
+            def threshold(i: int ,reading: int) -> int:
+                return int(reading > THRESHOLD[i])
 
 
             leds = list()
             # 2 leds for each sensor, e.g.:
-            # sensor #0 -> led #0 ONLY
-            # sensor #1 -> led #1, #2
-            # sensor #2 -> led #3, #4
-            for reading in readings[1:]:
-                leds.append(threshold(reading))
-                leds.append(threshold(reading))
-
-            # Insert led #0 if USING_0th
-            leds.insert(0, threshold(readings[0]) if USING_0th else None)
+            # sensor #0 -> (ignored)
+            # sensor #1 -> led #0, #1
+            # sensor #2 -> led #2, #3
+            # sensor #3 -> led #4, #5
+            # sensor #4 -> led #6, #7
+            # sensor #5 -> led #8, #9
+            for i, reading in enumerate(readings):
+                if i == 0:
+                    # Ignore sensor #0
+                    continue
+                leds.append(threshold(i, reading))
+                leds.append(threshold(i, reading))
 
             result = arduino.send_command("write_leds", leds=leds)
             log.info(f"{result.leds = }")
