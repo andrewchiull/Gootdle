@@ -54,7 +54,7 @@ def main():
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.initialize()
         
-        DEMO_MODE = True
+        DEMO_MODE = False
 
         while True:
             c = LedColor()
@@ -62,19 +62,35 @@ def main():
                 log.info(f"{DEMO_MODE = }")
                 def show_colors(colors: str):
                     leds = list()
-                    for color in colors:
+                    for color in colors[:S.SLOTS_SIZE]:
                         leds.append(getattr(c, color))
                         leds.append(getattr(c, color))
                     log.info(colors)
                     log.info(leds)
                     arduino.send_command("write_leds", leds=leds)
                 
-                
-                show_colors("WKWKW")
-                cv2.waitKey(0)
-                
-                show_colors("WKKWK")
-                cv2.waitKey(0)
+                RAINBOW = "RYGCBMRYGCBM"
+                steps = [
+                    "KKKKK",
+                    "WKKKK", # pick top
+                    
+                    RAINBOW[0:], # waiting
+                    RAINBOW[1:], # waiting
+                    RAINBOW[2:], # waiting
+                    RAINBOW[3:], # waiting
+                    RAINBOW[4:], # waiting
+                    RAINBOW[5:], # waiting
+                    "WYKYY", # bottoms
+                    "WCKYY", # bottoms 1
+                    "WYKCY", # bottoms 2
+                    "WYKYC", # bottoms 3
+                    "WYKCY", # bottoms 2
+                    "WYKWY", # bottoms 2
+                    "WKKWK", # bottoms 2
+                ]
+                for step in steps:
+                    show_colors(step)
+                    cv2.waitKey(0)
                 continue
                 
             result = arduino.send_command("read_sensors")
