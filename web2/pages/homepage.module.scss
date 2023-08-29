@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+.page-container {
+  body {
+    max-width: 1200px; /* Set a maximum content width */
+    margin: 0 auto; /* Center the content horizontally */
+  }
+}
+
+.head {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  .google {
+    margin-left: 20px;
+  }
+  .team {
+    color: #6d6d6d;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: Roboto;
+    margin-left: 20px;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 100%; /* 40px */
+    letter-spacing: -0.4px;
+  }
+  .teammember {
+    display: flex;
+    width: 15%;
+    height: 48px;
+    padding: 13.5px 20px 13.5px 21px;
+    margin-left: auto;
+    margin-right: 40px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #426b1f;
+    .word {
+      color: #fff;
+      text-align: center;
+      font-feature-settings: "clig" off, "liga" off;
+      font-family: Roboto;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 130%; /* 20.8px */
+    }
+  }
+}
+
+.closet {
+  width: 100%;
+
+  flex-shrink: 0;
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  .smart {
+    width: 40%;
+    height: 120px;
+    margin-left: 40px;
+    display: flex; /* 使用 Flexbox 佈局 */
+    flex-direction: column; /* 垂直佈局 */
+    .wordup {
+      color: #000;
+      font-feature-settings: "clig" off, "liga" off;
+      font-family: Roboto;
+      font-size: 60px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 76.8px */
+      letter-spacing: -1.28px;
+    }
+
+    .worddown {
+      color: #000;
+      font-feature-settings: "clig" off, "liga" off;
+      font-family: Roboto;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 130%; /* 26px */
+      margin-left: 5px;
+    }
+  }
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.19);
+}
+.season {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Vertically center the content */
+  justify-content: center; /* Horizontally center the content */
+  text-align: center;
+}
+
+.word {
+  width: 15%;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center text both horizontally and vertically */
+  flex-shrink: 0;
+  color: #000;
+  text-align: left;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+}
+.top {
+  margin-left: 10%;
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 20px;
+}
+.bottom {
+  margin-left: 10%;
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 40px;
+}
+.all {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .cloth {
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    width: 291px;
+    gap: 8px;
+    border-radius: 24px;
+    border: 2px solid #e6e6e6;
+
+    img {
+      width: 291px;
+      height: 296px;
+      border-radius: 24px 24px 0px 0px;
+    }
+    .info {
+      color: #000;
+      font-feature-settings: "clig" off, "liga" off;
+      font-family: Roboto;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%; /* 26px */
+      margin-bottom: 5px;
+    }
+  }
+}
