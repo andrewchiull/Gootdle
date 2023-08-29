@@ -2,7 +2,7 @@
 # TODO separate logging
 
 import os
-LOG_LEVEL = os.environ["LOG_LEVEL"]
+LOG_LEVEL = os.environ.get("LOG_LEVEL", default="DEBUG")
 print(f"{LOG_LEVEL = }")
 
 from pathlib import Path
@@ -49,6 +49,7 @@ import platform
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from serial import SerialException
+import numpy as np
 
 # TODO Add a logger for different debug mode
 
@@ -123,7 +124,7 @@ SerialException: Arduino device is not found. Current usb ports: None.
 class Settings(BaseSettings):
     # [Config - Pydantic](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.frozen)
     model_config = ConfigDict(frozen=True)
-    LOG_LEVEL: str = "INFO"
+    LOG_LEVEL: str = LOG_LEVEL
     DEBUG: bool = True if LOG_LEVEL == "DEBUG" else False
     ROOT: Path = ROOT_PATH
     OS: str = platform.system()
@@ -131,7 +132,7 @@ class Settings(BaseSettings):
     VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/fisheye.MOV")
     # VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/white_tshirt.MOV")
     SLOTS_SIZE: int = 5
-
+    EMPTY_IMAGE: np.ndarray = np.ndarray((1, 1, 3), np.uint8)
 
     # [Settings Management - Pydantic](https://docs.pydantic.dev/latest/usage/pydantic_settings/)
     # [Manage sensitive data with Docker secrets | Docker Documentation](https://docs.docker.com/engine/swarm/secrets/)

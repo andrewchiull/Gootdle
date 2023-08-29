@@ -6,15 +6,18 @@
 #define LED_0 13 // Build-in LED for testing
 
 #define SLOTS_SIZE 5
+
 #define LED_STRAND_PIN 6
 
 // memory calculator [Assistant | ArduinoJson 6](https://arduinojson.org/v6/assistant/#/step1)
 #define DOC_SIZE 512 // Don't go to large or small
 
-#define DELAY_TIME 100
+#define DELAY_TIME 10
+
+const int LEDS_SIZE = SLOTS_SIZE * 2;
 
 // LED_0 is unused
-Adafruit_NeoPixel pixels(SLOTS_SIZE + 1, LED_STRAND_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(LEDS_SIZE*2, LED_STRAND_PIN, NEO_GRB + NEO_KHZ800);
 
 
 
@@ -89,9 +92,13 @@ void loop() {
             else if (command == "write_leds") {
                 pixels.clear(); // Reset
                 Serial.print("[[DEBUG]]write_leds:");
-                for (int i = 1; i <= SLOTS_SIZE; i++) {
+                for (int i = 0; i < LEDS_SIZE; i++) {
                     Serial.print(int(leds[i]));
-                    write_led_strand(i, int(leds[i]));
+                    // write_led_strand(i, int(leds[i]));
+                    int R = int(leds[i][0]);
+                    int G = int(leds[i][1]);
+                    int B = int(leds[i][2]);
+                    write_led_strand(i, R, G, B);
                 }
                 Serial.println();
             }
@@ -103,6 +110,7 @@ void loop() {
         }
     }
 
+    // Clear buffer
     while (Serial.available() > 0)
         Serial.read();
 
