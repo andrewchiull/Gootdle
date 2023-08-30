@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "./homepage.module.scss";
+import Image from "next/image";
+import Swal from "sweetalert2";
+const axios = require("axios");
 
 const ClothesDetailPage = () => {
   const router = useRouter();
@@ -8,33 +11,107 @@ const ClothesDetailPage = () => {
   console.log(id);
 
   const [clothesData, setClothesData] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    // 在这里根据id参数获取特定衣物的数据，您可以使用您的数据源来替换这里的代码
-    // 例如：根据id从API获取衣物数据并将其存储在clothesData状态中
     if (id) {
+      // 发送 GET 请求到服务器获取衣物数据
       fetch(`/api/getClothes/${id}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
         .then((data) => setClothesData(data))
         .catch((error) => console.error("Error fetching data:", error));
     }
   }, [id]);
   console.log(clothesData);
 
-  
-
-
-
   if (!clothesData) {
     return <p>Loading...</p>;
   }
 
-  // 渲染衣物详细信息
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex < 2 ? prevIndex + 1 : 0));
+    console.log(clothesData.recommendation_slot[currentImageIndex]);
+  };
+
+  // 切换到上一张图片
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 2));
+    console.log(clothesData.recommendation_slot[currentImageIndex]);
+  };
+
+  const openCustomDialog = () => {
+    const slotLocation = clothesData.recommendation_slot[currentImageIndex];
+    const recommend = [];
+
+    // 向樹莓派後端發送POST請求
+    const postData = {
+      slot: slotLocation,
+      recommendations: recommend,
+    };
+    axios
+      .post("http://172.20.10.10:8000/items/confirm", postData, {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // 请求成功的处理逻辑
+        console.log("响应数据:", response.data);
+      })
+      .catch((error) => {
+        // 请求失败的处理逻辑
+        console.error("请求错误:", error);
+      });
+    Swal.fire({
+      title: "THE OUTFIT IS ON THE WAY !",
+      text: "HAVE A NICE DAY !",
+      background: "#FAFAF5",
+      confirmButtonText: "SURE!",
+      confirmButtonColor: "#426B1F",
+    });
+  };
+
+  const goToHomePage = () => {
+    router.push("/"); // 这里的 '/' 表示首页的路由路径
+  };
+
+  const send = () => {
+    if (id) {
+      // 发送 GET 请求到服务器获取衣物数据
+      fetch(`/api/se/${id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => setClothesData(data))
+        .catch((error) => console.error("Error fetching data:", error));
+    }
+  };
   return (
     <div>
       <div className={styles.closet}>
         <div className={styles.smart}>
-          <div className={styles.wordup}>Gootdle </div>
+          <div
+            className={styles.wordup}
+            style={{ cursor: "pointer" }}
+            onClick={goToHomePage}
+          >
+            <span className={styles.gootdleletter}>G</span>
+            <span className={styles.gootdleletter}>o</span>
+            <span className={styles.gootdleletter}>o</span>
+            <span className={styles.gootdleletter}>t</span>
+            <span className={styles.gootdleletter}>d</span>
+            <span className={styles.gootdleletter}>l</span>
+            <span className={styles.gootdleletter}>e</span>
+          </div>
           <div className={styles.worddown}>SMART DRESSING ZERO MESSING</div>
         </div>
       </div>
@@ -46,11 +123,33 @@ const ClothesDetailPage = () => {
         <div className={styles.word}>WINTER</div>
       </div>
       <div className={styles.line}></div>
+      <div className={styles.all}>
+        <div className={styles.cloth}>
+          <div className={styles.butt}>
+            <div
+              className={styles.image}
+              onClick={prevImage}
+              style={{ cursor: "pointer" }}
+            />
 
-      
-      <h1>{clothesData.color_name}</h1>
-      <p>Color: {clothesData.slot_location}</p>
-      {/* 其他衣物信息 */}
+            <img
+              src={clothesData.suit[currentImageIndex]}
+              alt="TRI"
+              width={100}
+              height={97}
+            />
+            <div
+              className={styles.image}
+              onClick={nextImage}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <div className={styles.info}>HAVE A NICE DAY!</div>
+        </div>
+      </div>
+      <button className={styles.comfirm} onClick={openCustomDialog}>
+        <div className={styles.word}>COMFIRM</div>
+      </button>
     </div>
   );
 };

@@ -5,7 +5,9 @@
     margin: 0 auto; /* Center the content horizontally */
   }
 }
-
+.root {
+  height: 100vh;
+}
 .head {
   width: 100%;
   height: 80px;
@@ -51,6 +53,8 @@
   }
 }
 
+/* 继续为每个字添加样式类 */
+
 .closet {
   width: 100%;
 
@@ -73,6 +77,20 @@
       font-weight: 400;
       line-height: 120%; /* 76.8px */
       letter-spacing: -1.28px;
+      .gootdleletter:nth-child(3) {
+        color: #ea4335; /* 第一个字的颜色 */
+      }
+
+      .gootdleletter:nth-child(4) {
+        color: #34a853; /* 第二个字的颜色 */
+      }
+      .gootdleletter:nth-child(5) {
+        color: #fcc31f; /* 第二个字的颜色 */
+      }
+
+      .gootdleletter:nth-child(2) {
+        color: #4285f4; /* 第三个字的颜色 */
+      }
     }
 
     .worddown {
@@ -154,7 +172,7 @@
     width: 291px;
     gap: 8px;
     border-radius: 24px;
-    border: 2px solid #e6e6e6;
+    border: 1px solid #e6e6e6;
 
     img {
       width: 291px;
@@ -172,4 +190,40 @@
       margin-bottom: 5px;
     }
   }
+}
+
+/* 当屏幕宽度小于768px时，调整元素的样式 */
+@media (max-width: 600px) {
+  .all {
+    .cloth {
+      width: 200px;
+
+      img {
+        width: 200px;
+        height: 200px;
+      }
+      .info {
+        font-family: Roboto;
+        font-size: 12px;
+      }
+    }
+  }
+  .top {
+    margin-left: 5%;
+
+    font-size: 25px;
+  }
+  .bottom {
+    margin-left: 5%;
+
+    font-size: 25px;
+  }
+  .tri {
+    width: 30px;
+    height: 60px;
+  }
+}
+
+/* 当屏幕高度小于500px时，调整元素的样式 */
+@media (max-height: 500px) {
 }

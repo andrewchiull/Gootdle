@@ -73,6 +73,20 @@
       font-weight: 400;
       line-height: 120%; /* 76.8px */
       letter-spacing: -1.28px;
+      .gootdleletter:nth-child(3) {
+        color: #ea4335; /* 第一个字的颜色 */
+      }
+
+      .gootdleletter:nth-child(4) {
+        color: #34a853; /* 第二个字的颜色 */
+      }
+      .gootdleletter:nth-child(5) {
+        color: #fcc31f; /* 第二个字的颜色 */
+      }
+
+      .gootdleletter:nth-child(2) {
+        color: #4285f4; /* 第三个字的颜色 */
+      }
     }
 
     .worddown {
@@ -138,12 +152,12 @@
   margin-top: 40px;
 }
 .all {
-  width: 70%;
+  width: 65%;
   margin-left: auto;
   margin-right: auto;
-
+  margin-top: 60px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   .cloth {
@@ -151,15 +165,27 @@
 
     flex-direction: column;
     align-items: center;
-    width: 291px;
+    width: 350px;
     gap: 8px;
     border-radius: 24px;
-    border: 2px solid #e6e6e6;
+    border: 1px solid #e6e6e6;
+    .butt {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
 
-    img {
-      width: 291px;
-      height: 296px;
-      border-radius: 24px 24px 0px 0px;
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 24px 24px 0px 0px;
+        cursor: pointer;
+      }
+      .image {
+        width: 100%;
+        height: auto;
+        background-color: #fff;
+        outline: 2px solid transparent;
+      }
     }
     .info {
       color: #000;
@@ -171,5 +197,29 @@
       line-height: 130%; /* 26px */
       margin-bottom: 5px;
     }
+  }
+}
+.comfirm {
+  display: flex;
+  width: 161px;
+  height: 48px;
+  padding: 13.5px 43px 13.5px 44px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #426b1f;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  .word {
+    color: #fff;
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 130%; /* 20.8px */
   }
 }
