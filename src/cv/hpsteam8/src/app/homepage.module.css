@@ -1,0 +1,241 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+.head {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.head .google {
+  margin-left: 20px;
+}
+.head .team {
+  color: #6d6d6d;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  margin-left: 20px;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 100%; /* 40px */
+  letter-spacing: -0.4px;
+}
+.head .teammember {
+  display: flex;
+  width: 15%;
+  height: 48px;
+  padding: 13.5px 20px 13.5px 21px;
+  margin-left: auto;
+  margin-right: 40px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #426b1f;
+}
+.head .teammember .word {
+  color: #fff;
+  text-align: center;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%; /* 20.8px */
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.19);
+}
+
+.closet {
+  width: 100%;
+  height: 130px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.closet .smart {
+  width: 40%;
+  height: 120px;
+  margin-left: 40px;
+  display: flex; /* 使用 Flexbox 佈局 */
+  flex-direction: column; /* 垂直佈局 */
+  justify-content: center; /* 將文字置中 */
+  align-items: center; /* 水平置中 */
+}
+.closet .smart .wordup {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Neuton;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 76.8px */
+  letter-spacing: -1.28px;
+}
+.closet .smart .worddown {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 130%; /* 26px */
+}
+.closet .season {
+  width: 35%;
+  margin-top: 70px;
+  height: 56px;
+  display: flex;
+  top: auto;
+  align-self: end;
+  margin-right: 20px;
+  justify-content: space-between; /* 將 .teammember 右對齊 */
+}
+.closet .season .word {
+  display: flex;
+  width: 95px;
+  height: 56px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  text-align: left;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+}
+.closet .line {
+  width: 1000px;
+  height: 1px;
+  color: #e6e6e6;
+}
+
+.webmain {
+  display: flex;
+}
+.webmain .choose {
+  margin-top: 10px;
+  margin-left: 50px;
+  width: 55%;
+}
+.webmain .choose .topchoose {
+  width: 90%;
+  height: 365px;
+}
+.webmain .choose .topchoose .word {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Neuton;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  margin-left: 70px;
+}
+.webmain .choose .topchoose .topitem {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+}
+.webmain .choose .topchoose .topitem .tri {
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+.webmain .choose .topchoose .topitem .tri2 {
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+.webmain .choose .topchoose .topitem .cloth {
+  width: 90%;
+  height: 100%;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid #e6e6e6;
+  background: #fafaf5;
+  display: flex;
+}
+.webmain .choose .topchoose .topitem .cloth img {
+  width: 45%;
+  height: 100%;
+  flex-shrink: 0;
+  border-radius: 20px 0px 0px 20px;
+}
+.webmain .choose .topchoose .topitem .cloth .info {
+  width: 55%;
+}
+.webmain .choose .topchoose .topitem .cloth .info .detail {
+  width: 90%;
+  height: 70px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.webmain .choose .topchoose .topitem .cloth .info .detail .bigname {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Inter;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 39px */
+}
+.webmain .choose .topchoose .topitem .cloth .info .detail .season {
+  color: #426b1f;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%; /* 26px */
+}
+.webmain .outcome {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  height: 642px;
+  margin-left: 30px;
+  margin-top: 60px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid #e6e6e6;
+  background: #fafaf5;
+}
+.webmain .outcome img {
+  width: 100%;
+  height: 570px;
+  flex-shrink: 0;
+  border-radius: 20px 20px 0px 0px;
+}
+.webmain .outcome .teammember {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  display: flex;
+  width: 40%;
+  height: 48px;
+  padding: 13.5px 20px 13.5px 21px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #426b1f;
+}
+.webmain .outcome .teammember .word {
+  color: #fff;
+  text-align: center;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%; /* 20.8px */
+}/*# sourceMappingURL=homepage.module.css.map */

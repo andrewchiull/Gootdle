@@ -59,13 +59,14 @@
   margin-top: 20px;
   justify-content: space-between;
   .smart {
-    width: 40%;
+    width: 100%;
     height: 120px;
-    margin-left: 40px;
+    margin-left: 10px;
     display: flex; /* 使用 Flexbox 佈局 */
     flex-direction: column; /* 垂直佈局 */
     .wordup {
       color: #000;
+
       font-feature-settings: "clig" off, "liga" off;
       font-family: Roboto;
       font-size: 60px;
@@ -73,31 +74,17 @@
       font-weight: 400;
       line-height: 120%; /* 76.8px */
       letter-spacing: -1.28px;
-      .gootdleletter:nth-child(3) {
-        color: #ea4335; /* 第一个字的颜色 */
-      }
-
-      .gootdleletter:nth-child(4) {
-        color: #34a853; /* 第二个字的颜色 */
-      }
-      .gootdleletter:nth-child(5) {
-        color: #fcc31f; /* 第二个字的颜色 */
-      }
-
-      .gootdleletter:nth-child(2) {
-        color: #4285f4; /* 第三个字的颜色 */
-      }
     }
 
     .worddown {
       color: #000;
       font-feature-settings: "clig" off, "liga" off;
       font-family: Roboto;
-      font-size: 20px;
+      font-size: 15px;
       font-style: normal;
       font-weight: 300;
       line-height: 130%; /* 26px */
-      margin-left: 5px;
+      margin-left: 15px;
     }
   }
 }
@@ -152,12 +139,12 @@
   margin-top: 40px;
 }
 .all {
-  width: 65%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 60px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
   .cloth {
@@ -165,27 +152,16 @@
 
     flex-direction: column;
     align-items: center;
-    width: 350px;
+    width: 420px;
+    height: 800px;
     gap: 8px;
     border-radius: 24px;
     border: 1px solid #e6e6e6;
-    .butt {
-      display: flex;
-      width: 100%;
-      flex-direction: row;
 
-      img {
-        width: 100%;
-        height: auto;
-        border-radius: 24px 24px 0px 0px;
-        cursor: pointer;
-      }
-      .image {
-        width: 100%;
-        height: auto;
-        background-color: #fff;
-        outline: 2px solid transparent;
-      }
+    img {
+      width: 200px;
+      height: 100%;
+      border-radius: 24px 24px 0px 0px;
     }
     .info {
       color: #000;
@@ -198,6 +174,46 @@
       margin-bottom: 5px;
     }
   }
+
+  // .cloth {
+  //   display: flex;
+
+  //   flex-direction: column;
+  //   align-items: center;
+  //   width: 350px;
+  //   gap: 8px;
+  //   border-radius: 24px;
+  //   border: 1px solid #e6e6e6;
+  //   .butt {
+  //     display: flex;
+  //     width: 100%;
+  //     flex-direction: row;
+
+  //     img {
+  //       width: 100%;
+  //       height: auto;
+  //       border-radius: 24px 24px 0px 0px;
+  //       cursor: pointer;
+  //     }
+  //     .image {
+  //       width: 100%;
+  //       height: auto;
+  //       border-radius: 24px;
+  //       background-color: #fff;
+  //       outline: 2px solid transparent;
+  //     }
+  //   }
+  //   .info {
+  //     color: #000;
+  //     font-feature-settings: "clig" off, "liga" off;
+  //     font-family: Roboto;
+  //     font-size: 20px;
+  //     font-style: normal;
+  //     font-weight: 400;
+  //     line-height: 130%; /* 26px */
+  //     margin-bottom: 5px;
+  //   }
+  // }
 }
 .comfirm {
   display: flex;
@@ -221,5 +237,90 @@
     font-style: normal;
     font-weight: 600;
     line-height: 130%; /* 20.8px */
+  }
+}
+
+@media (max-width: 600px) {
+  .all {
+    width: 90%;
+    .cloth {
+      width: 200px;
+      height: auto;
+
+      img {
+        width: 200px;
+        height: auto;
+      }
+      .info {
+        font-family: Roboto;
+        font-size: 12px;
+      }
+    }
+  }
+  .top {
+    margin-left: 5%;
+
+    font-size: 25px;
+  }
+  .bottom {
+    margin-left: 5%;
+
+    font-size: 25px;
+  }
+  .tri {
+    width: 45px;
+    height: 90px;
+  }
+  .word {
+    width: 25%;
+    font-size: 12px;
+  }
+}
+
+.ci {
+  animation-name: rotate; /*動畫名稱(自訂)*/
+  animation-duration: 4s; /*一次完整動畫時間為4秒*/
+  animation-iteration-count: infinite; /*播放次數為無限次*/
+  animation-direction: alternate; /*播放方向為先正向再反向*/
+}
+@keyframes ani-circle {
+  /*動畫名稱為 ani-circle*/
+  0% {
+    background-color: red;
+    left: 0px;
+  }
+  25% {
+    background-color: yellow;
+    left: 50px;
+  }
+  50% {
+    background-color: blue;
+    left: 80px;
+  }
+  75% {
+    background-color: green;
+    left: 120px;
+  }
+  100% {
+    background-color: red;
+    left: 200px;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg); // 初始状态，不旋转
+  }
+  25% {
+    transform: rotate(180deg); // 旋转90度
+  }
+  50% {
+    transform: rotate(270deg); // 旋转180度
+  }
+  75% {
+    transform: rotate(360deg); // 旋转270度
+  }
+  100% {
+    transform: rotate(360deg); // 完整旋转360度
   }
 }

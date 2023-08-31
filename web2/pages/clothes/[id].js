@@ -12,6 +12,7 @@ const ClothesDetailPage = () => {
 
   const [clothesData, setClothesData] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
@@ -26,22 +27,40 @@ const ClothesDetailPage = () => {
         .then((data) => setClothesData(data))
         .catch((error) => console.error("Error fetching data:", error));
     }
+    setTimeout(() => {
+      // 设置clothesData为模拟的数据
+
+      setIsLoading(false); // 数据加载完成后停止显示加载图标
+    }, 3000); // 4秒后加载数据
   }, [id]);
   console.log(clothesData);
 
-  if (!clothesData) {
-    return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className={styles.ci}>
+        <img
+          src="/Gootdle_logo_large.png"
+          alt="gootdle"
+          width={250}
+          height={83}
+        />
+      </div>
+    );
   }
 
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex < 2 ? prevIndex + 1 : 0));
-    console.log(clothesData.recommendation_slot[currentImageIndex]);
+  const nextImage = async () => {
+    const nextIndex =
+      (currentImageIndex + 1) % clothesData.recommendation_slot.length;
+
+    setCurrentImageIndex(nextIndex);
   };
 
-  // 切换到上一张图片
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 2));
-    console.log(clothesData.recommendation_slot[currentImageIndex]);
+  const prevImage = async () => {
+    const prevIndex =
+      currentImageIndex === 0
+        ? clothesData.recommendation_slot.length - 1
+        : currentImageIndex - 1;
+    setCurrentImageIndex(prevIndex);
   };
 
   const openCustomDialog = () => {
@@ -74,6 +93,10 @@ const ClothesDetailPage = () => {
       background: "#FAFAF5",
       confirmButtonText: "SURE!",
       confirmButtonColor: "#426B1F",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/";
+      }
     });
   };
 
@@ -99,19 +122,15 @@ const ClothesDetailPage = () => {
     <div>
       <div className={styles.closet}>
         <div className={styles.smart}>
-          <div
-            className={styles.wordup}
-            style={{ cursor: "pointer" }}
+          <Image
+            src="/Gootdle_logo_large.png"
+            alt="gootdle"
+            width={250}
+            height={83}
             onClick={goToHomePage}
-          >
-            <span className={styles.gootdleletter}>G</span>
-            <span className={styles.gootdleletter}>o</span>
-            <span className={styles.gootdleletter}>o</span>
-            <span className={styles.gootdleletter}>t</span>
-            <span className={styles.gootdleletter}>d</span>
-            <span className={styles.gootdleletter}>l</span>
-            <span className={styles.gootdleletter}>e</span>
-          </div>
+            className={styles.gootdle}
+          />
+
           <div className={styles.worddown}>SMART DRESSING ZERO MESSING</div>
         </div>
       </div>
@@ -124,28 +143,34 @@ const ClothesDetailPage = () => {
       </div>
       <div className={styles.line}></div>
       <div className={styles.all}>
+        <Image
+          src="/Polygon 4.png"
+          alt="TRI"
+          width={50}
+          height={97}
+          onClick={prevImage}
+          className={styles.tri}
+          style={{ cursor: "pointer" }}
+        />
         <div className={styles.cloth}>
-          <div className={styles.butt}>
-            <div
-              className={styles.image}
-              onClick={prevImage}
-              style={{ cursor: "pointer" }}
-            />
+          <img
+            src={clothesData.suit[currentImageIndex]}
+            alt="TRI"
+            width={100}
+            height={97}
+          />
 
-            <img
-              src={clothesData.suit[currentImageIndex]}
-              alt="TRI"
-              width={100}
-              height={97}
-            />
-            <div
-              className={styles.image}
-              onClick={nextImage}
-              style={{ cursor: "pointer" }}
-            />
-          </div>
           <div className={styles.info}>HAVE A NICE DAY!</div>
         </div>
+        <Image
+          src="/Polygon 1.png"
+          alt="TRI"
+          width={50}
+          height={97}
+          onClick={nextImage}
+          className={styles.tri}
+          style={{ cursor: "pointer" }}
+        />
       </div>
       <button className={styles.comfirm} onClick={openCustomDialog}>
         <div className={styles.word}>COMFIRM</div>

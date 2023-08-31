@@ -12,6 +12,13 @@ const HomePage = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
+    // if (typeof window !== "undefined") {
+    //   window.onload = function () {
+    //     // 页面已加载完成，可以执行您的代码
+    //     // 例如，执行滚动操作
+    //     window.scrollTo(0, 700); // 将页面滚动到指定高度
+    //   };
+    // }
   }, []);
   console.log(data);
   const bottomClothes = data.filter((item) => item.cloth_type === "bottom");
@@ -92,15 +99,13 @@ const HomePage = () => {
       <div className={styles.root}>
         <div className={styles.closet}>
           <div className={styles.smart}>
-            <div className={styles.wordup}>
-              <span className={styles.gootdleletter}>G</span>
-              <span className={styles.gootdleletter}>o</span>
-              <span className={styles.gootdleletter}>o</span>
-              <span className={styles.gootdleletter}>t</span>
-              <span className={styles.gootdleletter}>d</span>
-              <span className={styles.gootdleletter}>l</span>
-              <span className={styles.gootdleletter}>e</span>
-            </div>
+            <Image
+              src="/Gootdle_logo_large.png"
+              alt="gootdle"
+              width={250}
+              height={83}
+              className={styles.gootdle}
+            />
             <div className={styles.worddown}>SMART DRESSING ZERO MESSING</div>
           </div>
         </div>
@@ -146,7 +151,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ) : (
-                <p>No data available.</p>
+                <div className={styles.skeleton}></div>
               )}
               <Image
                 src="/Polygon 1.png"
@@ -172,7 +177,12 @@ const HomePage = () => {
               {bottomClothes.length > 0 &&
               currentIndexbottom < bottomClothes.length ? (
                 <div key={bottomClothes[currentIndexbottom].id}>
-                  <div className={styles.cloth}>
+                  <div
+                    className={styles.cloth}
+                    onClick={() =>
+                      goToClothesPage(bottomClothes[currentIndexbottom].id)
+                    }
+                  >
                     <img
                       src={bottomClothes[currentIndexbottom].photo_path}
                       alt="TRI"
@@ -185,7 +195,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ) : (
-                <p>No data available.</p>
+                <div className={styles.skeleton}></div>
               )}
               <Image
                 src="/Polygon 1.png"
@@ -193,7 +203,7 @@ const HomePage = () => {
                 width={50}
                 height={97}
                 onClick={handleNextClickbottom}
-                 className={styles.tri}
+                className={styles.tri}
               />
             </div>
           </div>
