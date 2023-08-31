@@ -113,6 +113,8 @@ nano ~/.zshrc
 
 # Git/GitHub
 
+## [如何在 Monorepo 透過 Git 的 Sparse Checkout 取得部分 Repo 內容 | The Will Will Web](https://blog.miniasp.com/post/2022/05/17/Down-size-your-Monorepo-with-Git-Sparse-checkouts)
+
 ## Tutorial
 
 [連猴子都能懂的Git入門指南 | 貝格樂（Backlog）](https://backlog.com/git-tutorial/tw/)
