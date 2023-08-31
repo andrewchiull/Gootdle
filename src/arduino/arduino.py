@@ -12,7 +12,7 @@ import serial
 from serial.threaded import ReaderThread
 
 SLOTS_SIZE = S.SLOTS_SIZE
-SLEEP_SEC = 0.1
+SLEEP_SEC = 0.05
 
 class Message(BaseModel):
     timestamp: str

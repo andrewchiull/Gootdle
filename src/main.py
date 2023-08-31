@@ -54,7 +54,8 @@ def main():
         arduino: ArduinoControl # NOT a ArduinoThread object!!!
         arduino.initialize()
         
-        DEMO_MODE = False
+        # DEMO_MODE = False
+        DEMO_MODE = True
 
         while True:
             c = LedColor()
@@ -68,68 +69,104 @@ def main():
                     log.info(colors)
                     log.info(leds)
                     arduino.send_command("write_leds", leds=leds)
-                
+
+
+                # Opening
                 RAINBOW = "RYGCBMRYGCBM"
                 steps = [
-                    "KKKKK",
-                    "WKKKK", # pick top
-                    
                     RAINBOW[0:], # waiting
+                    # RAINBOW[1:], # waiting
+                    # RAINBOW[2:], # waiting
+                    # RAINBOW[3:], # waiting
+                    # RAINBOW[4:], # waiting
+                ]
+                
+                for step in steps:
+                    show_colors(step)
+
+                # # waiting
+                # i = 0
+                # while True:
+                #     i += 1
+                #     show_colors(steps[i % 5])
+                #     if cv2.waitKey(1) & 0xFF == 27:  # 按下"esc"键
+                #         break
+
+
+                show_colors("KKKKK")
+                cv2.waitKey(0)
+
+
+                # 1
+                show_colors("WKKKK")
+                cv2.waitKey(0)
+
+                # pending
+                RAINBOW = "GKKKKGKKKK"
+                steps = [
+                    # RAINBOW[0:], # waiting
                     RAINBOW[1:], # waiting
                     RAINBOW[2:], # waiting
                     RAINBOW[3:], # waiting
                     RAINBOW[4:], # waiting
                     RAINBOW[5:], # waiting
-                    "WYKYY", # bottoms
-                    "WCKYY", # bottoms 1
-                    "WYKCY", # bottoms 2
-                    "WYKYC", # bottoms 3
-                    "WYKCY", # bottoms 2
-                    "WYKWY", # bottoms 2
-                    "WKKWK", # bottoms 2
                 ]
                 for step in steps:
+                    step = 'W' + step
                     show_colors(step)
-                    cv2.waitKey(0)
-                continue
+                    # time.sleep(0.05)
                 
-            result = arduino.send_command("read_sensors")
-            log.info(f"{result.sensors = }")
+                # 1
+                show_colors("WKKKK")
+                cv2.waitKey(0)
+                
+                # 1, 5
+                show_colors("WKKKW")
+                cv2.waitKey(0)
+                
+                # NO
+                show_colors("KKKKK")
 
-            # Convert readings
-            readings = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
-                       for V_out in result.sensors]
+                
+                break
+                
+            # result = arduino.send_command("read_sensors")
+            # log.info(f"{result.sensors = }")
+
+            # # Convert readings
+            # readings = [int(SCALE * (V_in-V_out)/(V_out*R_f)) 
+            #            for V_out in result.sensors]
             
-            # Ignore sensor #0
-            readings[0] = None
-            log.info(f"{readings = }")
-            sleep(SLEEP_SEC)
+            # # Ignore sensor #0
+            # readings[0] = None
+            # log.info(f"{readings = }")
+            # sleep(SLEEP_SEC)
 
-            def threshold(i: int ,reading: int) -> int:
-                return int(reading > THRESHOLD[i])
-
-
-            leds = list()
-            # 2 leds for each sensor, e.g.:
-            # sensor #0 -> (ignored)
-            # sensor #1 -> led #0, #1
-            # sensor #2 -> led #2, #3
-            # sensor #3 -> led #4, #5
-            # sensor #4 -> led #6, #7
-            # sensor #5 -> led #8, #9
-            for i, reading in enumerate(readings):
-                if i == 0:
-                    # Ignore sensor #0
-                    continue
-                high_or_low = threshold(i, reading) * 255
-                leds.append([high_or_low, high_or_low, high_or_low])
-                leds.append([high_or_low, high_or_low, high_or_low])
+            # def threshold(i: int ,reading: int) -> int:
+            #     return int(reading > THRESHOLD[i])
 
 
-            result = arduino.send_command("write_leds", leds=leds)
-            log.info(f"{result.leds = }")
+            # leds = list()
+            # # 2 leds for each sensor, e.g.:
+            # # sensor #0 -> (ignored)
+            # # sensor #1 -> led #0, #1
+            # # sensor #2 -> led #2, #3
+            # # sensor #3 -> led #4, #5
+            # # sensor #4 -> led #6, #7
+            # # sensor #5 -> led #8, #9
+            # for i, reading in enumerate(readings):
+            #     if i == 0:
+            #         # Ignore sensor #0
+            #         continue
+            #     high_or_low = threshold(i, reading) * 255
+            #     leds.append([high_or_low, high_or_low, high_or_low])
+            #     leds.append([high_or_low, high_or_low, high_or_low])
 
-            sleep(SLEEP_SEC)
+
+            # result = arduino.send_command("write_leds", leds=leds)
+            # log.info(f"{result.leds = }")
+
+            # sleep(SLEEP_SEC)
 
 
 
