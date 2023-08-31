@@ -99,7 +99,7 @@ def main():
 
                 # 1
                 show_colors("WKKKK")
-                cv2.waitKey(0)
+                # cv2.waitKey(0)
 
                 # pending
                 RAINBOW = "GKKKKGKKKK"

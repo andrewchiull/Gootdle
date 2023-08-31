@@ -132,7 +132,7 @@ class Settings(BaseSettings):
     VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/fisheye.MOV")
     # VIDEO_SOURCE: str = str(ROOT/"src/cv/test_input_video/white_tshirt.MOV")
     SLOTS_SIZE: int = 5
-    EMPTY_IMAGE: np.ndarray = np.ndarray((1, 1, 3), np.uint8)
+    EMPTY_IMAGE: np.ndarray = np.ndarray((300, 300, 3), np.uint8)
 
     # [Settings Management - Pydantic](https://docs.pydantic.dev/latest/usage/pydantic_settings/)
     # [Manage sensitive data with Docker secrets | Docker Documentation](https://docs.docker.com/engine/swarm/secrets/)
