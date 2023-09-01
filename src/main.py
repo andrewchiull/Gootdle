@@ -116,6 +116,8 @@ def main():
                     show_colors(step)
                     # time.sleep(0.05)
                 
+                cv2.waitKey(0)
+
                 # 1
                 show_colors("WKKKK")
                 cv2.waitKey(0)
@@ -128,6 +130,7 @@ def main():
                 show_colors("KKKKK")
 
                 
+                # continue
                 break
                 
             # result = arduino.send_command("read_sensors")

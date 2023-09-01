@@ -35,7 +35,9 @@ class PoseDetectionForStream:
         options = PoseLandmarkerOptions(
             base_options=BaseOptions(model_asset_path=model_path),
             running_mode=VisionRunningMode.LIVE_STREAM,
-            result_callback=self.output_result)
+            result_callback=self.output_result,
+            num_poses=2 # people
+            )
         return PoseLandmarker.create_from_options(options)
 
     def detect(self, frame: np.ndarray) -> Optional[PoseLandmarkerResult]:
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     from imutils.video import FPS
 
     # cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
-    cap = WebcamVideoStream(src=0).start()
+    cap = WebcamVideoStream(src=1).start() # Source
     fps = FPS().start()
     MODEL_PATH = S.ROOT / "src/cv/mp/pose_landmarker_lite.task"
     pose = PoseDetectionForStream(MODEL_PATH)
