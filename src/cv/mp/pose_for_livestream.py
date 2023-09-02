@@ -75,7 +75,7 @@ if __name__ == "__main__":
     from imutils.video import FPS
 
     # cap = WebcamVideoStream(src=S.VIDEO_SOURCE).start()
-    cap = WebcamVideoStream(src=1).start() # Source
+    cap = WebcamVideoStream(src=0).start() # Source
     fps = FPS().start()
     MODEL_PATH = S.ROOT / "src/cv/mp/pose_landmarker_lite.task"
     pose = PoseDetectionForStream(MODEL_PATH)

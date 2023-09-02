@@ -116,8 +116,11 @@ def main():
                     show_colors(step)
                     # time.sleep(0.05)
                 
-                cv2.waitKey(0)
+                # cv2.waitKey(0)
 
+                # 1
+                show_colors("WKKKK")
+                cv2.waitKey(0)
                 # 1
                 show_colors("WKKKK")
                 cv2.waitKey(0)
