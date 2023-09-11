@@ -6,10 +6,9 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const { createClient } = require("@supabase/supabase-js");
-const SERVICE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNveWF1ZnB0cm1ubGdpZ2FkbmNuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5MTg5NTg3NCwiZXhwIjoyMDA3NDcxODc0fQ.s17n0nPQBcADiy5xxvVXEeNz6Kzc9QzHNq40p3nThjM";
+const SERVICE_KEY ="your_supabase_service_key";
 
-const SUPABASE_URL = "https://coyaufptrmnlgigadncn.supabase.co";
+const SUPABASE_URL = "your_supabase_url";
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
@@ -29,7 +28,7 @@ server.get("/api/getData", async (req, res) => {
     res.status(500).json({ error: "An error occurred." });
   }
 });
-//
+
 //更改衣服資訊
 server.post("/api/updateClothes/:id", async (req, res) => {
   try {

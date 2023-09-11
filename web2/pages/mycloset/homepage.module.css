@@ -1,0 +1,266 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+.page-container body {
+  max-width: 1200px; /* Set a maximum content width */
+  margin: 0 auto; /* Center the content horizontally */
+}
+
+.root {
+  height: 100vh;
+}
+
+.head {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.head .google {
+  margin-left: 20px;
+}
+.head .team {
+  color: #6d6d6d;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  margin-left: 20px;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 100%; /* 40px */
+  letter-spacing: -0.4px;
+}
+.head .teammember {
+  display: flex;
+  width: 15%;
+  height: 48px;
+  padding: 13.5px 20px 13.5px 21px;
+  margin-left: auto;
+  margin-right: 40px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #426b1f;
+}
+.head .teammember .word {
+  color: #fff;
+  text-align: center;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%; /* 20.8px */
+}
+
+.skeleton {
+  width: 291px;
+  height: 337px;
+  background-color: #fff;
+  border-radius: 24px 24px 0px 0px;
+  /* 其他樣式屬性，例如邊框、動畫等 */
+}
+
+/* 继续为每个字添加样式类 */
+.closet {
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.closet .smart {
+  width: 100%;
+  height: 120px;
+  margin-left: 10px;
+  display: flex; /* 使用 Flexbox 佈局 */
+  flex-direction: column; /* 垂直佈局 */
+}
+.closet .smart .wordup {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 76.8px */
+  letter-spacing: -1.28px;
+}
+.closet .smart .worddown {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 130%; /* 26px */
+  margin-left: 15px;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.19);
+}
+
+.season {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Vertically center the content */
+  justify-content: center; /* Horizontally center the content */
+  text-align: center;
+}
+
+.word {
+  width: 15%;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center text both horizontally and vertically */
+  flex-shrink: 0;
+  color: #000;
+  text-align: left;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+}
+
+.top {
+  margin-left: 10%;
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 20px;
+}
+
+.bottom {
+  margin-left: 10%;
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 40px;
+}
+
+.all {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.all .cloth {
+  display: flex;
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-direction: column;
+  align-items: center;
+  width: 291px;
+  gap: 8px;
+  border-radius: 24px;
+  border: 1px solid #e6e6e6;
+}
+.all .cloth img {
+  width: 291px;
+  height: 296px;
+  border-radius: 24px 24px 0px 0px;
+}
+.all .cloth img .bgmask {
+  filter: brightness(30%);
+  z-index: 99;
+}
+.all .cloth .info {
+  color: #000;
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 26px */
+  margin-bottom: 5px;
+}
+
+/* 当屏幕宽度小于768px时，调整元素的样式 */
+@media (max-width: 600px) {
+  .all {
+    width: 85%;
+  }
+  .all .cloth {
+    width: 200px;
+  }
+  .all .cloth img {
+    width: 200px;
+    height: 200px;
+  }
+  .all .cloth .info {
+    font-family: Roboto;
+    font-size: 12px;
+  }
+  .top {
+    margin-left: 5%;
+    font-size: 25px;
+  }
+  .bottom {
+    margin-left: 5%;
+    font-size: 25px;
+  }
+  .tri {
+    width: 30px;
+    height: 60px;
+  }
+  .word {
+    width: 25%;
+    font-size: 12px;
+  }
+}
+/* 当屏幕高度小于500px时，调整元素的样式 */
+.ody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  perspective: 1000px; /* 设置透视度 */
+}
+
+.textcontainer {
+  font-size: 48px;
+  animation: flip 5s infinite linear; /* 使用名为 "flip" 的动画，无限循环 */
+}
+
+.gootdleletter:nth-child(3) {
+  color: #ea4335; /* 第一个字的颜色 */
+}
+
+.gootdleletter:nth-child(4) {
+  color: #34a853; /* 第二个字的颜色 */
+}
+
+.gootdleletter:nth-child(5) {
+  color: #fcc31f; /* 第二个字的颜色 */
+}
+
+.gootdleletter:nth-child(2) {
+  color: #4285f4; /* 第三个字的颜色 */
+}
+
+/* 添加动画效果 */
+@keyframes flip {
+  0%, 100% {
+    transform: rotateY(0deg); /* 初始和结束状态，不翻转 */
+  }
+  50% {
+    transform: rotateY(180deg); /* 中间状态，翻转180度 */
+  }
+}/*# sourceMappingURL=homepage.module.css.map */

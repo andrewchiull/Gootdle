@@ -6,18 +6,19 @@ import { useRouter } from "next/router";
 
 const HomePage = () => {
   const [data, setData] = useState([]);
-  const { createClient } = require("@supabase/supabase-js");
-  const SERVICE_KEY = "your_supabase_service_key";
-
-  const SUPABASE_URL = "your_supabase_url";
-
-  const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
   useEffect(() => {
     fetch("/api/getData")
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
+    // if (typeof window !== "undefined") {
+    //   window.onload = function () {
+    //     // 页面已加载完成，可以执行您的代码
+    //     // 例如，执行滚动操作
+    //     window.scrollTo(0, 700); // 将页面滚动到指定高度
+    //   };
+    // }
   }, []);
   console.log(data);
   const bottomClothes = data.filter((item) => item.cloth_type === "bottom");
@@ -66,27 +67,9 @@ const HomePage = () => {
 
   const goToClothesPage = (id) => {
     router.push(`/clothes/${id}`);
-    handleupdatedata(id);
   };
-
-  const handleupdatedata = async (id) => {
-    // 取得目前顯示的衣物資料
-
-    // 更新資料庫中的資料
-    try {
-      const { data, error } = await supabase
-        .from("closet")
-        .update({ state: "OUT" }) // 假設有一個 worn_times 屬性用於記錄穿著次數
-        .eq("id", id); // 根據 id 更新特定資料
-
-      if (error) {
-        console.error("Error updating data:", error);
-      } else {
-        console.log("Data updated successfully:", data);
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
+  const goToHomePage = () => {
+    router.push("/"); // 这里的 '/' 表示首页的路由路径
   };
 
   return (
@@ -99,6 +82,7 @@ const HomePage = () => {
               alt="gootdle"
               width={250}
               height={83}
+              onClick={goToHomePage}
               className={styles.gootdle}
             />
             <div className={styles.worddown}>SMART DRESSING ZERO MESSING</div>
@@ -117,89 +101,77 @@ const HomePage = () => {
           <div>
             <div className={styles.top}>TOP</div>
             <div className={styles.all}>
-              <Image
-                src="/Polygon 4.png"
-                alt="TRI"
-                width={50}
-                height={97}
-                onClick={handlePrevClick}
-                className={styles.tri}
-              />
-
               {topClothes.length > 0 && currentIndex < topClothes.length ? (
-                <div key={topClothes[currentIndex].id}>
-                  <div
-                    className={styles.cloth}
-                    onClick={() => goToClothesPage(topClothes[currentIndex].id)}
-                  >
-                    <div className={styles.cloth}>
+                topClothes.map((clothingItem) => (
+                  <div key={clothingItem.id} className={styles.cloth}>
+                    {clothingItem.state == "OUT" ? (
+                      <>
+                        <img
+                          src={clothingItem.photo_path}
+                          alt="TRI"
+                          width={100}
+                          height={97}
+                        />
+
+                        <div className={styles.info}>{clothingItem.state}</div>
+                      </>
+                    ) : (
+                      <div
+                        onClick={() => goToClothesPage(clothingItem.id)}
+                        className={styles.cloth}
+                      >
+                        <img
+                          src={clothingItem.photo_path}
+                          alt="TRI"
+                          width={100}
+                          height={97}
+                        />
+                        <div className={styles.info}>{clothingItem.state}</div>
+                      </div>
+                    )}
+                    {/* <div
+                      onClick={() => goToClothesPage(clothingItem.id)}
+                      className={styles.cloth}
+                    >
                       <img
-                        src={topClothes[currentIndex].photo_path}
+                        src={clothingItem.photo_path}
                         alt="TRI"
                         width={100}
                         height={97}
                       />
-                      <div className={styles.info}>
-                        {topClothes[currentIndex].color_name}
-                      </div>
-                    </div>
+                      <div className={styles.info}>{clothingItem.state}</div>
+                    </div> */}
                   </div>
-                </div>
+                ))
               ) : (
                 <div className={styles.skeleton}></div>
               )}
-              <Image
-                src="/Polygon 1.png"
-                alt="TRI"
-                width={50}
-                height={97}
-                onClick={handleNextClick}
-                className={styles.tri}
-              />
             </div>
           </div>
           <div>
             <div className={styles.bottom}>BOTTOM</div>
             <div className={styles.all}>
-              <Image
-                src="/Polygon 4.png"
-                alt="TRI"
-                width={50}
-                height={97}
-                onClick={handlePrevClickbottom}
-                className={styles.tri}
-              />
               {bottomClothes.length > 0 &&
               currentIndexbottom < bottomClothes.length ? (
-                <div key={bottomClothes[currentIndexbottom].id}>
-                  <div
-                    className={styles.cloth}
-                    onClick={() =>
-                      goToClothesPage(bottomClothes[currentIndexbottom].id)
-                    }
-                  >
-                    <img
-                      src={bottomClothes[currentIndexbottom].photo_path}
-                      alt="TRI"
-                      width={100}
-                      height={97}
-                    />
-                    <div className={styles.info}>
-                      {bottomClothes[currentIndexbottom].color_name}
+                bottomClothes.map((clothingItem) => (
+                  <div key={clothingItem.id} className={styles.cloth}>
+                    <div
+                      onClick={() => goToClothesPage(clothingItem.id)}
+                      className={styles.cloth}
+                    >
+                      <img
+                        src={clothingItem.photo_path}
+                        alt="TRI"
+                        width={100}
+                        height={97}
+                      />
+                      <div className={styles.info}>{clothingItem.state}</div>
                     </div>
                   </div>
-                </div>
+                ))
               ) : (
                 <div className={styles.skeleton}></div>
               )}
-              <Image
-                src="/Polygon 1.png"
-                alt="TRI"
-                width={50}
-                height={97}
-                onClick={handleNextClickbottom}
-                className={styles.tri}
-              />
             </div>
           </div>
         </div>

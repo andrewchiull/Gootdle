@@ -63,8 +63,35 @@ const ClothesDetailPage = () => {
     setCurrentImageIndex(prevIndex);
   };
 
+  const { createClient } = require("@supabase/supabase-js");
+  const SERVICE_KEY = "your_supabase_service_key";
+
+  const SUPABASE_URL = "your_supabase_url";
+
+  const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
+  const handleupdatedata = async (id) => {
+    // 取得目前顯示的衣物資料
+
+    // 更新資料庫中的資料
+    try {
+      const { data, error } = await supabase
+        .from("closet")
+        .update({ state: "OUT" }) // 假設有一個 worn_times 屬性用於記錄穿著次數
+        .eq("id", id); // 根據 id 更新特定資料
+
+      if (error) {
+        console.error("Error updating data:", error);
+      } else {
+        console.log("Data updated successfully:", data);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   const openCustomDialog = () => {
     const slotLocation = clothesData.recommendation_slot[currentImageIndex];
+    console.log(slotLocation);
     const recommend = [];
 
     // 向樹莓派後端發送POST請求
@@ -91,11 +118,14 @@ const ClothesDetailPage = () => {
       title: "THE OUTFIT IS ON THE WAY !",
       text: "HAVE A NICE DAY !",
       background: "#FAFAF5",
-      confirmButtonText: "SURE!",
+      confirmButtonText: "SURE",
       confirmButtonColor: "#426B1F",
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/";
+        handleupdatedata(slotLocation);
+        setTimeout(function () {
+          window.location.href = "/mycloset";
+        }, 800); // 3000 毫秒等于 3 秒
       }
     });
   };
@@ -160,7 +190,7 @@ const ClothesDetailPage = () => {
             height={97}
           />
 
-          <div className={styles.info}>HAVE A NICE DAY!</div>
+          <div className={styles.info}></div>
         </div>
         <Image
           src="/Polygon 1.png"
